@@ -1,5 +1,7 @@
 package com.company;
 
+import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
@@ -22,10 +24,13 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
         String input;
-        String revealed_codeword = codeword.replaceAll("[a-z]", "_");
+        String revealed_codeword;
 
         String playAgain = "yes";
         while(playAgain.equals("yes") || playAgain.equals("y")){
+
+            codeword = generateRandomWord();
+            revealed_codeword = codeword.replaceAll("[a-z]", "_");
             while(wrong_letters.length() < MAX_WRONG_GUESSES){
                 drawHangman();
                 System.out.println(revealed_codeword);
@@ -162,5 +167,23 @@ public class Main {
             e.printStackTrace();
         }
         return str;
+    }
+
+    private static String generateRandomWord(){
+        Random rand = new Random();
+
+        ArrayList<String> words = new ArrayList<String>();
+        words.add("cat");
+        words.add("dog");
+        words.add("umbrella");
+        words.add("waterfall");
+        words.add("house");
+        words.add("computer");
+        words.add("java");
+        words.add("flower");
+        words.add("candle");
+        words.add("music");
+
+        return words.get(rand.nextInt(words.size()));
     }
 }
