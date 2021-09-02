@@ -12,7 +12,6 @@ public class Main {
         Random rand = new Random();
 
         System.out.println("Hello! What is your name?");
-
         String name = scanner.nextLine();
 
         String playAgain = "y";
@@ -30,6 +29,8 @@ public class Main {
                 try{
                     guess = scanner.nextInt();
                     counter++;
+                    if(guess > number) System.out.println("Your guess was too high");
+                    else if(guess < number) System.out.println("Your guess was too low");
                 }catch(Exception e){
                     System.out.println("That was not a number.");
                 }
@@ -46,7 +47,5 @@ public class Main {
                 System.out.println("Invalid input.");
             }
         }
-
-
     }
 }
