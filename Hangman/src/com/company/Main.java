@@ -1,15 +1,14 @@
 package com.company;
 
-import java.util.Locale;
 import java.util.Scanner;
 
 public class Main {
 
     static String guessed_letters = "";//string that tracks previously guessed letters
+    static String wrong_letters = ""; //letters guessed that were not in codeword
     static String codeword = "cat";//codeword for the user to guess
 
     static int num_letters_revealed = 0;//how many letters in the codeword have been guessed
-    static int num_wrong_guesses = 0;//number of times user has input a letter that was not in codeword
 
     static final int MAX_WRONG_GUESSES = 6;//amount of times player can guess incorrectly
 
@@ -23,11 +22,13 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
         String input;
+        String revealed_codeword = codeword.replaceAll("[a-z]", "_");
 
         String playAgain = "yes";
         while(playAgain.equals("yes") || playAgain.equals("y")){
-            while(num_wrong_guesses < MAX_WRONG_GUESSES){
+            while(wrong_letters.length() < MAX_WRONG_GUESSES){
                 drawHangman();
+                System.out.println(revealed_codeword);
                 System.out.println("Please guess a letter:");
 
                 boolean loop = true;
@@ -40,16 +41,18 @@ public class Main {
                         guessed_letters = guessed_letters + input;
                         loop = false;
                     } else{
-                        System.out.println("Input a single character only.");
+                        System.out.println("Input a single character you have not guessed before.");
                     }
                 }
-                System.out.println(revealedCodeword());
+
+                revealed_codeword = calculateRevealedCodeword();
                 if(num_letters_revealed == codeword.length()){//You win
+                    System.out.println(codeword);
                     System.out.printf("Yes! The secret word is \"%s\"! You have won!\n", codeword);
                     break;
                 }
             }
-            if(num_wrong_guesses >= MAX_WRONG_GUESSES){//You lose
+            if(wrong_letters.length() >= MAX_WRONG_GUESSES){//You lose
                 drawHangman();
                 System.out.println("You lose!");
             }
@@ -64,19 +67,20 @@ public class Main {
             }while(!(input.equals("yes") || input.equals("no") || input.equals("y") || input.equals("n")));
 
             playAgain = input;
+
             //reset instance variables
             guessed_letters = "";
+            wrong_letters = "";
             num_letters_revealed = 0;
-            num_wrong_guesses = 0;
         }
     }
 
     //this function draws the hangman stick figure
     private static void drawHangman(){
 
-        System.out.printf("missed Letters: %s\n", guessed_letters);
+        System.out.printf("missed Letters: %s\n", wrong_letters);
 
-        switch(num_wrong_guesses){
+        switch(wrong_letters.length()){
             case 0: System.out.print(
                     " +--+\n" +
                     "    |\n" +
@@ -132,7 +136,7 @@ public class Main {
 
     //this function computes the revealed codeword based on previously guessed letters
     //it sets the instance variables num_letters_revealed and num_wrong_guesses depending on the result.
-    private static String revealedCodeword(){
+    private static String calculateRevealedCodeword(){
         String str = "";//string with the characters that make up the revealed codeword
         int temp_num_letters_revealed = 0;//a temp variable to compare to the previous amount of letters revealed
 
@@ -147,12 +151,15 @@ public class Main {
                 } else str = str + "_";//add a _ placeholder
             }
 
-            //if no new letters were revealed, the guess was wrong.
-            if(temp_num_letters_revealed == num_letters_revealed) num_wrong_guesses++;
-            else num_letters_revealed = temp_num_letters_revealed;
+            if(guessed_letters.length()>0){
+                //if no new letters were revealed, the guess was wrong.
+                if(temp_num_letters_revealed == num_letters_revealed)
+                    wrong_letters = wrong_letters + guessed_letters.substring(guessed_letters.length()-1, guessed_letters.length());
+                else num_letters_revealed = temp_num_letters_revealed;
+            }
 
-        }catch(Exception e){
-            System.out.println("Could not draw codeword.");
+        }catch(Exception e) {
+            e.printStackTrace();
         }
         return str;
     }
