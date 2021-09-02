@@ -1,5 +1,6 @@
 package com.company;
 
+import java.util.Locale;
 import java.util.Scanner;
 
 public class Main {
@@ -23,32 +24,51 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         String input;
 
-        while(num_wrong_guesses < MAX_WRONG_GUESSES){
-            drawHangman();
-            System.out.println("Please guess a letter:");
+        String playAgain = "yes";
+        while(playAgain.equals("yes") || playAgain.equals("y")){
+            while(num_wrong_guesses < MAX_WRONG_GUESSES){
+                drawHangman();
+                System.out.println("Please guess a letter:");
 
-            boolean loop = true;
-            while(loop){
-                input = scanner.nextLine();
-
-                if(input.matches("[A-Za-z]{1}")){
-
+                boolean loop = true;
+                while(loop){
+                    input = scanner.nextLine();
                     input = input.toLowerCase();
-                    guessed_letters = guessed_letters + input;
-                    loop = false;
-                } else{
-                    System.out.println("Input a single character only.");
+
+                    //make sure it is a single letter and that the player hasnt already guessed the letter
+                    if(input.matches("[a-z]{1}") && !guessed_letters.contains(input)){
+                        guessed_letters = guessed_letters + input;
+                        loop = false;
+                    } else{
+                        System.out.println("Input a single character only.");
+                    }
+                }
+                System.out.println(revealedCodeword());
+                if(num_letters_revealed == codeword.length()){//You win
+                    System.out.printf("Yes! The secret word is \"%s\"! You have won!\n", codeword);
+                    break;
                 }
             }
-            System.out.println(revealedCodeword());
-            if(num_letters_revealed == codeword.length()){//You win
-                System.out.println("Hooray! You win!");
-                return;
+            if(num_wrong_guesses >= MAX_WRONG_GUESSES){//You lose
+                drawHangman();
+                System.out.println("You lose!");
             }
+
+            boolean has_looped = false;
+            do{
+                if(has_looped) System.out.println("please enter yes or no");
+                System.out.println("Do you want to play again? (yes or no)");
+
+                input = scanner.nextLine();
+                input = input.toLowerCase();
+            }while(!(input.equals("yes") || input.equals("no") || input.equals("y") || input.equals("n")));
+
+            playAgain = input;
+            //reset instance variables
+            guessed_letters = "";
+            num_letters_revealed = 0;
+            num_wrong_guesses = 0;
         }
-        //You lose
-        drawHangman();
-        System.out.println("You lose!");
     }
 
     //this function draws the hangman stick figure
@@ -127,7 +147,8 @@ public class Main {
                 } else str = str + "_";//add a _ placeholder
             }
 
-            if(temp_num_letters_revealed == num_letters_revealed) num_wrong_guesses++;//if no new letters were revealed, the guess was wrong.
+            //if no new letters were revealed, the guess was wrong.
+            if(temp_num_letters_revealed == num_letters_revealed) num_wrong_guesses++;
             else num_letters_revealed = temp_num_letters_revealed;
 
         }catch(Exception e){
