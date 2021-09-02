@@ -15,7 +15,7 @@ public class Main {
 
         String name = scanner.nextLine();
 
-        System.out.println("Well, Abaddon, I am thinking of a number between 1 and 20.");
+        System.out.printf("Well, %s, I am thinking of a number between 1 and 20.\n", name);
 
         int guess = 0, number = 0, counter = 0;
         number = rand.nextInt(20) + 1;
@@ -32,7 +32,7 @@ public class Main {
             }
         }
 
-        if(counter <= MAX_GUESSES) System.out.println("Good job, Abaddon! You guessed my number in 3 guesses!");
+        if(counter <= MAX_GUESSES) System.out.printf("Good job, %s! You guessed my number in %d guesses!\n", name, counter);
         else System.out.println("You ran out of guesses");
 
     }
