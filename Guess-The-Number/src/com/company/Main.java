@@ -22,8 +22,6 @@ public class Main {
             int guess = 0, number = 0, counter = 0;
             number = rand.nextInt(20) + 1;
 
-            System.out.println(number);
-
             while(guess != number && counter < MAX_GUESSES){
                 System.out.println("Take a Guess.");
                 try{
