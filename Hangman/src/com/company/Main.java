@@ -8,7 +8,7 @@ public class Main {
 
     static String guessed_letters = "";//string that tracks previously guessed letters
     static String wrong_letters = ""; //letters guessed that were not in codeword
-    static String codeword = "cat";//codeword for the user to guess
+    static String codeword = "";//codeword for the user to guess
 
     static int num_letters_revealed = 0;//how many letters in the codeword have been guessed
 
@@ -80,65 +80,6 @@ public class Main {
         }
     }
 
-    //this function draws the hangman stick figure
-    private static void drawHangman(){
-
-        System.out.printf("missed Letters: %s\n", wrong_letters);
-
-        switch(wrong_letters.length()){
-            case 0: System.out.print(
-                    " +--+\n" +
-                    "    |\n" +
-                    "    |\n" +
-                    "    |\n" +
-                    "____|\n");
-                break;
-            case 1: System.out.print(
-                    " +--+\n" +
-                    " O  |\n" +
-                    "    |\n" +
-                    "    |\n" +
-                    "____|\n");
-                break;
-            case 2: System.out.print(
-                    " +--+\n" +
-                    " O  |\n" +
-                    " |  |\n" +
-                    "    |\n" +
-                    "____|\n");
-                break;
-            case 3: System.out.print(
-                    " +--+\n" +
-                    " O  |\n" +
-                    " |  |\n" +
-                    " |  |\n" +
-                    "____|\n");
-                break;
-            case 4: System.out.print(
-                    " +--+\n" +
-                    " O  |\n" +
-                    " |\\ |\n" +
-                    " |  |\n" +
-                    "____|\n");
-                break;
-            case 5: System.out.print(
-                    " +--+\n" +
-                    " O  |\n" +
-                    "/|\\ |\n" +
-                    " |  |\n" +
-                    "____|\n");
-                break;
-            case 6: System.out.print(
-                    " +--+\n" +
-                    " O  |\n" +
-                    "/|\\ |\n" +
-                    "/|  |\n" +
-                    "____|\n");
-                break;
-            default: break;
-        }
-    }
-
     //this function computes the revealed codeword based on previously guessed letters
     //it sets the instance variables num_letters_revealed and num_wrong_guesses depending on the result.
     private static String calculateRevealedCodeword(){
@@ -169,6 +110,7 @@ public class Main {
         return str;
     }
 
+    //randomly picks a word from the list and returns it
     private static String generateRandomWord(){
         Random rand = new Random();
 
@@ -185,5 +127,64 @@ public class Main {
         words.add("music");
 
         return words.get(rand.nextInt(words.size()));
+    }
+
+    //this function draws the hangman stick figure
+    private static void drawHangman(){
+
+        System.out.printf("missed Letters: %s\n", wrong_letters);
+
+        switch(wrong_letters.length()){
+            case 0: System.out.print(
+                    " +--+\n" +
+                            "    |\n" +
+                            "    |\n" +
+                            "    |\n" +
+                            "____|\n");
+                break;
+            case 1: System.out.print(
+                    " +--+\n" +
+                            " O  |\n" +
+                            "    |\n" +
+                            "    |\n" +
+                            "____|\n");
+                break;
+            case 2: System.out.print(
+                    " +--+\n" +
+                            " O  |\n" +
+                            " |  |\n" +
+                            "    |\n" +
+                            "____|\n");
+                break;
+            case 3: System.out.print(
+                    " +--+\n" +
+                            " O  |\n" +
+                            " |  |\n" +
+                            " |  |\n" +
+                            "____|\n");
+                break;
+            case 4: System.out.print(
+                    " +--+\n" +
+                            " O  |\n" +
+                            " |\\ |\n" +
+                            " |  |\n" +
+                            "____|\n");
+                break;
+            case 5: System.out.print(
+                    " +--+\n" +
+                            " O  |\n" +
+                            "/|\\ |\n" +
+                            " |  |\n" +
+                            "____|\n");
+                break;
+            case 6: System.out.print(
+                    " +--+\n" +
+                            " O  |\n" +
+                            "/|\\ |\n" +
+                            "/|  |\n" +
+                            "____|\n");
+                break;
+            default: break;
+        }
     }
 }
