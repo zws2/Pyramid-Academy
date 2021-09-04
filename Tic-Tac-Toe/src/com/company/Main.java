@@ -43,34 +43,28 @@ public class Main {
     }
 
     private static boolean hasWon(char mark){
+        if(
+        checkBoard(new int[]{0,1,2}, mark) ||
+        checkBoard(new int[]{3,4,5}, mark) ||
+        checkBoard(new int[]{6,7,8}, mark) ||
 
-        final int BOARD_LEN = 3;
+        checkBoard(new int[]{0,3,6}, mark) ||
+        checkBoard(new int[]{1,4,7}, mark) ||
+        checkBoard(new int[]{2,5,8}, mark) ||
 
-        //check row
-        int start = 0;
-        for (int i = start; i < BOARD_SIZE; i++) {
-            if(board[i] != mark){
-                start += BOARD_LEN;
-                i = start;
-            }else if(i == start + BOARD_LEN-1){
-                System.out.println("row win for " + mark);
-                return true;
-            }
+        checkBoard(new int[]{0,4,8}, mark) ||
+        checkBoard(new int[]{2,4,6}, mark)
+        ) return true;
+
+        else return false;
+    }
+
+    private static boolean checkBoard(int[] positions, char mark){
+
+        for (int pos : positions) {
+            if(board[pos] != mark) return false;
         }
-
-        //check col
-        start = 0;
-        for (int i = start; i < BOARD_SIZE; i+=BOARD_LEN) {
-            if(board[i] != mark){
-                start++;
-                i = start;
-            }else if(i == BOARD_SIZE-BOARD_LEN+start){
-                System.out.println("row win for " + mark);
-                return true;
-            }
-        }
-
-        return false;
+        return true;
     }
 
     private static void initBoard(){
