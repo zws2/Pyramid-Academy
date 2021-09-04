@@ -30,9 +30,16 @@ public class Main {
 
         System.out.println(player_token);
 
+        do{
+            drawBoard();
+            do{
+                input = scanner.nextLine();
+            }while(!input.matches("[1-9]"));
+            board[Integer.parseInt(input)-1] = player_token;
+
+        }while(isBoardFull());
         drawBoard();
-
-
+        System.out.println("Game over");
     }
 
     private static void initBoard(){
@@ -41,6 +48,14 @@ public class Main {
         for (int i = 0; i < BOARD_SIZE; i++) {
             board[i] = ' ';
         }
+    }
+
+    private static boolean isBoardFull(){
+        final int BOARD_SIZE = 9;
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            if(board[i] == ' ') return true;
+        }
+        return false;
     }
 
     private static void drawBoard(){
