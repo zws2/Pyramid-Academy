@@ -18,32 +18,44 @@ public class Main {
     private static void initGame(){
 
         Scanner scanner = new Scanner(System.in);
-        initBoard();
-
-        System.out.print("Welcome to Tic-Tac-Toe!\n" +
-                "Do you want to be X or O?\n");
-
         String input;
-        do{
-            input = scanner.nextLine();
-        }while(!input.matches("[xoXO]"));
-        input = input.toUpperCase();
-        player_token = input.charAt(0);
 
-        do{
-            moveForComputer();
+        do {
+            initBoard();
+
+            System.out.print("Welcome to Tic-Tac-Toe!\n" +
+                    "Do you want to be X or O?\n");
+
+            do {
+                input = scanner.nextLine();
+            } while (!input.matches("[xoXO]"));
+            input = input.toUpperCase();
+            player_token = input.charAt(0);
+
+            do {
+                moveForComputer();
+                drawBoard();
+                if (isBoardFull() || hasWon('X') || hasWon('O')) break;
+
+                do {
+                    do {
+                        input = scanner.nextLine();
+                    } while (!input.matches("[1-9]"));
+                } while (board[Integer.parseInt(input) - 1] != ' ');
+                board[Integer.parseInt(input) - 1] = player_token;
+            } while (!isBoardFull() && !hasWon('X') && !hasWon('O'));
+
             drawBoard();
-            if(isBoardFull() || hasWon('X') || hasWon('O')) break;
+            System.out.println("Game over");
+            System.out.println("Do you want to play again? (yes or no)");
 
             do{
-                do{
-                    input = scanner.nextLine();
-                }while(!input.matches("[1-9]"));
-            }while(board[Integer.parseInt(input)-1] != ' ');
-            board[Integer.parseInt(input)-1] = player_token;
-        }while(!isBoardFull() && !hasWon('X') && !hasWon('O'));
-        drawBoard();
-        System.out.println("Game over");
+                input = scanner.nextLine();
+                input = input.toLowerCase();
+            }while(!input.equals("yes") && !input.equals("no")
+                    &&!input.equals("y") && !input.equals("n"));
+
+        }while(input.equals("yes") || input.equals("y"));
     }
 
     private static void moveForComputer(){
