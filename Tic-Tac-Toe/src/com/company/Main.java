@@ -30,18 +30,26 @@ public class Main {
 
         System.out.println(player_token);
 
+        drawBoard();
 
 
     }
 
     private static void initBoard(){
-        board = new char[9];
-        for (char c : board) {
-            c = ' ';
+        final int BOARD_SIZE = 9;
+        board = new char[BOARD_SIZE];
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            board[i] = ' ';
         }
     }
 
     private static void drawBoard(){
+
+        System.out.printf("%c|%c|%c\n", board[0], board[1], board[2]);
+        System.out.println("------");
+        System.out.printf("%c|%c|%c\n", board[3], board[4], board[5]);
+        System.out.println("------");
+        System.out.printf("%c|%c|%c\n", board[6], board[7], board[8]);
 
     }
 }
