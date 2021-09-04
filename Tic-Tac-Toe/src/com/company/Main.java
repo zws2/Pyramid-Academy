@@ -30,16 +30,34 @@ public class Main {
         input = input.toUpperCase();
         player_token = input.charAt(0);
 
+        moveForComputer();
         do{
             drawBoard();
             do{
-                input = scanner.nextLine();
-            }while(!input.matches("[1-9]"));
+                do{
+                    input = scanner.nextLine();
+                }while(!input.matches("[1-9]"));
+            }while(board[Integer.parseInt(input)-1] != ' ');
             board[Integer.parseInt(input)-1] = player_token;
 
+            moveForComputer();
         }while(!isBoardFull() && !hasWon('X') && !hasWon('O'));
         drawBoard();
         System.out.println("Game over");
+    }
+
+    private static void moveForComputer(){
+
+        char computer_token;
+        if(player_token == 'X') computer_token = 'O';
+        else computer_token = 'X';
+
+        for (int i = 0; i < board.length; i++) {
+            if(board[i] == ' '){
+                board[i] = computer_token;
+                return;
+            }
+        }
     }
 
     private static boolean hasWon(char mark){
