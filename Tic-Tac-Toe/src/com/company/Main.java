@@ -30,17 +30,17 @@ public class Main {
         input = input.toUpperCase();
         player_token = input.charAt(0);
 
-        moveForComputer();
         do{
+            moveForComputer();
             drawBoard();
+            if(isBoardFull() || hasWon('X') || hasWon('O')) break;
+
             do{
                 do{
                     input = scanner.nextLine();
                 }while(!input.matches("[1-9]"));
             }while(board[Integer.parseInt(input)-1] != ' ');
             board[Integer.parseInt(input)-1] = player_token;
-
-            moveForComputer();
         }while(!isBoardFull() && !hasWon('X') && !hasWon('O'));
         drawBoard();
         System.out.println("Game over");
@@ -71,10 +71,11 @@ public class Main {
         checkBoard(new int[]{2,5,8}, mark) ||
 
         checkBoard(new int[]{0,4,8}, mark) ||
-        checkBoard(new int[]{2,4,6}, mark)
-        ) return true;
-
-        else return false;
+        checkBoard(new int[]{2,4,6}, mark))
+        {
+            System.out.println(mark + " has won!");
+            return true;
+        } else return false;
     }
 
     private static boolean checkBoard(int[] positions, char mark){
