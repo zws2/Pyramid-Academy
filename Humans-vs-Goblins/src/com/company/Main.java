@@ -20,20 +20,21 @@ public class Main {
 
     public static void initGame(){
         initGrid();
-        displayGrid();
-
+        
         Scanner scanner = new Scanner(System.in);
         String input;
 
         do {
             initGrid();
 
+            do {
+                enemyTurn();
                 displayGrid();
                 do {
-                    do {
-                        System.out.println("input");
-                        input = scanner.nextLine();
-                    } while (!input.matches("[a-z]"));
+                    System.out.println("Please enter a direction: ");
+                    input = scanner.nextLine();
+                } while (!input.matches("[nsewNSEW]"));
+                enemyTurn();
             } while (!gameOver);
 
             displayGrid();
@@ -55,13 +56,22 @@ public class Main {
                 grid[i][j] = ' ';
             }
         }
+
+        grid[0][9] = 'X';
+        grid[9][0] = 'O';
+    }
+    public static void enemyTurn(){
+        System.out.println("Enemy Turn");
+
     }
     public static void displayGrid(){
+        System.out.println("____________________");
         for (int i = 0; i < GRID_SIZE; i++) {
             for (int j = 0; j < GRID_SIZE; j++) {
                 System.out.print("|"+grid[i][j]);
             }
             System.out.println("|");
         }
+        System.out.println("____________________");
     }
 }
