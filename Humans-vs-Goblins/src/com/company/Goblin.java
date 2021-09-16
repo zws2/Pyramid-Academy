@@ -12,6 +12,7 @@ public class Goblin extends Player {
         damageMod = 1;
         ac = 11;
         hp = 7;
+        isDead = false;
     }
 
     public String toString(){return name + " is at " + hp +" hp";}

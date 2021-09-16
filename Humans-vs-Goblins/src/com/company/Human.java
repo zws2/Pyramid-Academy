@@ -11,6 +11,7 @@ public class Human extends Player {
         damageMod = 2;
         ac = 13;
         hp = 15;
+        isDead = false;
     }
 
     public String toString(){return name + " is at " + hp +" hp";}

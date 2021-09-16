@@ -7,11 +7,14 @@ public class Player {
     protected String name;
     protected char token;
     protected int[] position;
+
     protected int attackMod;
     protected int damageDie;
     protected int damageMod;
     protected int ac;
     protected int hp;
+
+    protected boolean isDead;
 
     protected Player enemy;
 
@@ -36,7 +39,7 @@ public class Player {
 
         char[][] grid = Game.getGrid();
         if(grid[position[0]-coords[0]][position[1]+coords[1]] == enemy.token){
-            attack(enemy);
+            Game.combat(this, enemy);
         }
         if(grid[position[0]-coords[0]][position[1]+coords[1]] == ' '){
 
@@ -54,26 +57,44 @@ public class Player {
         this.enemy = enemy;
     }
 
-    private boolean attack(Player e){
-        Random rand = new Random();
+    public void attack(Player enemy){
 
-//        do {
-//            System.out.println("Enemy Turn...");
-//            g.takeTurn();
-//            displayGrid();
-//            System.out.println("Player Turn...");
-//            h.attemptMove(getCoords(input));
-//            displayGrid();
-//        } while (hp > 0 &&);
+            System.out.println(name + " Turn...");
 
+            int damage = rollDamage();
+            System.out.println(name + " Dealt " + damage + " damage to " + enemy.name + "!");
+            enemy.takeDamage(damage);
+
+            System.out.println(enemy.toString());
     }
 
-    public int getHp() {
-        return hp;
+//    private int rollAttack(){
+//
+//
+//    }
+
+    private int rollDamage(){
+        Random rand = new Random();
+
+        return rand.nextInt(damageDie) + damageMod;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void setHp(int hp) {
         this.hp = hp;
+    }
+
+    public void takeDamage(int damage){
+
+        hp -= damage;
+        if(hp < 0) isDead = true;
+    }
+
+    public int getHp() {
+        return hp;
     }
 
     public int getAttackMod() {

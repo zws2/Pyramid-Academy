@@ -50,6 +50,21 @@ public class Game {
         scanner.close();
     }
 
+    public static void combat(Player p1, Player p2){
+
+        do {
+            p1.attack(p2);
+            p2.attack(p1);
+
+        } while (!p1.isDead && !p2.enemy.isDead);
+
+        if(p1.isDead) System.out.println(p2.name + " has won!");
+        else if(p2.isDead) System.out.println(p1.name + " has won!");
+
+        gameOver = true;
+
+    }
+
     private static void takeTurn(){}
 
     private static void initGrid(){
