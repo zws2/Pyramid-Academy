@@ -16,7 +16,9 @@ public class Game {
 
         Goblin g = new Goblin();
         Human h = new Human();
-        //Player[] ps = new Player[]{g,h};
+
+        h.setEnemy(g);
+        g.setEnemy(h);
 
         do {
             initGrid();
