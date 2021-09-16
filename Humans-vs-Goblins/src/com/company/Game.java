@@ -24,15 +24,20 @@ public class Game {
             initGrid();
 
             do {
-                System.out.println("Enemy Turn...");
+
+                System.out.println(g.getName() + " Turn...");
                 g.takeTurn();
+                if(gameOver)break;
                 displayGrid();
-                System.out.println("Player Turn...");
+
+                System.out.println(h.getName() + " Turn...");
                 do {
                     System.out.println("Please enter a direction: ");
                     input = scanner.nextLine();
                 } while (!input.matches("[nsewNSEW]"));
+
                 h.attemptMove(getCoords(input));
+                if(gameOver)break;
                 displayGrid();
             } while (!gameOver);
 
@@ -54,9 +59,10 @@ public class Game {
 
         do {
             p1.attack(p2);
+            if(p1.isDead) break;
             p2.attack(p1);
-
-        } while (!p1.isDead && !p2.enemy.isDead);
+            if(p2.isDead) break;
+        } while (true);
 
         if(p1.isDead) System.out.println(p2.name + " has won!");
         else if(p2.isDead) System.out.println(p1.name + " has won!");
