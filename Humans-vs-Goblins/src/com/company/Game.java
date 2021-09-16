@@ -41,7 +41,6 @@ public class Game {
                 displayGrid();
             } while (!gameOver);
 
-            displayGrid();
             System.out.println("Game over");
             System.out.println("Do you want to play again? (yes or no)");
 
@@ -65,7 +64,7 @@ public class Game {
         } while (true);
 
         if(p1.isDead) System.out.println(p2.name + " has won!");
-        else if(p2.isDead) System.out.println(p1.name + " has won!");
+        else System.out.println(p1.name + " has won!");
 
         gameOver = true;
 
