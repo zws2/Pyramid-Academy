@@ -7,28 +7,32 @@ public class Player {
 
     public void takeTurn(){
         char[][] grid = Game.getGrid();
-        System.out.println("Enemy Turn " + position[0] + position[1]);
         if(position[0] >= 0 && position[1] >= 0){
-            if(attemptMove(1,0)){
+            if(attemptMove(new int[]{1,0})){
                 System.out.println("up");
-            }else if(attemptMove(-1,0)){
+            }else if(attemptMove(new int[]{-1,0})){
                 System.out.println("down");
-            }else if(attemptMove(0,1)){
+            }else if(attemptMove(new int[]{0,1})){
                 System.out.println("left");
-            }else if(attemptMove(0,-1)){
+            }else if(attemptMove(new int[]{0,-1})){
                 System.out.println("right");
             }else System.out.println("no move");
         }
     }
 
-    private boolean attemptMove(int vert, int hor){
-        if(position[0]+vert >= Game.GRID_SIZE || position[1]+hor >= Game.GRID_SIZE
-            || position[0]+vert < 0 || position[1]+hor < 0) return false;
+    protected boolean attemptMove(int[] coords){
+        if(position[0]-coords[0] >= Game.GRID_SIZE || position[1]+coords[1] >= Game.GRID_SIZE
+            || position[0]-coords[0] < 0 || position[1]+coords[1] < 0) return false;
 
         char[][] grid = Game.getGrid();
-        if(grid[position[0]+vert][position[1]+hor] == ' '){
+        if(grid[position[0]-coords[0]][position[1]+coords[1]] == ' '){
+
             grid[position[0]][position[1]] = ' ';
-            grid[position[0]+vert][position[1]+hor] = token;
+            grid[position[0]-coords[0]][position[1]+coords[1]] = token;
+
+            position[0] = position[0]-coords[0];
+            position[1] = position[1]+coords[1];
+
             return true;
         }else return false;
     }

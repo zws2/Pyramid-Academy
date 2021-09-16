@@ -16,19 +16,21 @@ public class Game {
 
         Goblin g = new Goblin();
         Human h = new Human();
-        Player[] p = new Player[]{g,h};
+        //Player[] ps = new Player[]{g,h};
 
         do {
             initGrid();
 
             do {
+                System.out.println("Enemy Turn...");
                 g.takeTurn();
                 displayGrid();
+                System.out.println("Player Turn...");
                 do {
                     System.out.println("Please enter a direction: ");
                     input = scanner.nextLine();
                 } while (!input.matches("[nsewNSEW]"));
-                h.takeTurn();
+                h.attemptMove(getCoords(input));
                 displayGrid();
             } while (!gameOver);
 
@@ -85,6 +87,14 @@ public class Game {
 
     public static void setGameOver(boolean gameOver) {
         Game.gameOver = gameOver;
+    }
+
+    private static int[] getCoords(String s){
+        if(s.charAt(0) == 'n') return new int[]{1,0};
+        else if(s.charAt(0) == 's') return new int[]{-1,0};
+        else if(s.charAt(0) == 'e') return new int[]{0,1};
+        else if(s.charAt(0) == 'w') return new int[]{0,-1};
+        else return new int[] {0,0};
     }
 
 
