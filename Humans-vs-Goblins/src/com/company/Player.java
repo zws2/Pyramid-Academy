@@ -1,6 +1,6 @@
 package com.company;
 
-public class Character {
+public class Player {
 
     protected char token;
     protected int[] position = {};
@@ -22,6 +22,9 @@ public class Character {
     }
 
     private boolean attemptMove(int vert, int hor){
+        if(position[0]+vert >= Game.GRID_SIZE || position[1]+hor >= Game.GRID_SIZE
+            || position[0]+vert < 0 || position[1]+hor < 0) return false;
+
         char[][] grid = Game.getGrid();
         if(grid[position[0]+vert][position[1]+hor] == ' '){
             grid[position[0]][position[1]] = ' ';
@@ -29,4 +32,5 @@ public class Character {
             return true;
         }else return false;
     }
+
 }

@@ -1,6 +1,6 @@
 package com.company;
 
-public class Goblin extends Character{
+public class Goblin extends Player {
 
 
     public Goblin(){

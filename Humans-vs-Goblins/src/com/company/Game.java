@@ -5,8 +5,8 @@ import java.util.Scanner;
 public class Game {
 
     private static char[][] grid;
-    private static final int GRID_SIZE = 10;
     private static boolean gameOver = false;
+    public static final int GRID_SIZE = 10;
 
     public static void initGame(){
         initGrid();
@@ -16,6 +16,7 @@ public class Game {
 
         Goblin g = new Goblin();
         Human h = new Human();
+        Player[] p = new Player[]{g,h};
 
         do {
             initGrid();
@@ -27,6 +28,8 @@ public class Game {
                     System.out.println("Please enter a direction: ");
                     input = scanner.nextLine();
                 } while (!input.matches("[nsewNSEW]"));
+                h.takeTurn();
+                displayGrid();
             } while (!gameOver);
 
             displayGrid();
@@ -40,8 +43,10 @@ public class Game {
                     &&!input.equals("y") && !input.equals("n"));
 
         }while(input.equals("yes") || input.equals("y"));
-
+        scanner.close();
     }
+
+    private static void takeTurn(){}
 
     private static void initGrid(){
         grid = new char[GRID_SIZE][GRID_SIZE];
@@ -81,4 +86,6 @@ public class Game {
     public static void setGameOver(boolean gameOver) {
         Game.gameOver = gameOver;
     }
+
+
 }
