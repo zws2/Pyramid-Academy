@@ -22,14 +22,14 @@ public class Ship {
 
     public ArrayList<int[]> getCoords(){
         ArrayList<int[]> coords = new ArrayList<int[]>();
-        int vert=0, hor=0;
-        if(layout == 'v') vert = 1;
-        else hor = 1;
+        int x=0, y=0;
+        if(layout == 'h') x = 1;
+        else y = 1;
 
         coords.add(position);
 
         for (int i = 1; i < size; i++) {
-            coords.add(new int[]{position[0] + (i*vert), position[1] + (i*hor)});
+            coords.add(new int[]{position[0] + (i*x), position[1] + (i*y)});
         }
 
         return coords;

@@ -26,6 +26,8 @@ public class Game {
             p1.setName(askName("two"));
 
             p1.getFleet().add(new Ship(3, new int[]{0,0}, 'v'));
+            p1.getFleet().add(new Ship(3, new int[]{0,1}, 'v'));
+
             p2.getFleet().add(new Ship(3, new int[]{0,0}, 'v'));
 
             do {
@@ -50,7 +52,8 @@ public class Game {
         } while (!input.matches("[1-9][1-9]"));
 
         p.attack(input);
-        displayHiddenGrid(p.getShots(), p.getFleet());
+        displayGrid();
+        //displayHiddenGrid(p.getShots(), p.getFleet());
     }
 
     private static String askName(String s){
@@ -88,9 +91,9 @@ public class Game {
 
     private static void displayGrid(){
         System.out.println("____________________");
-        for (int i = 0; i < GRID_SIZE; i++) {
-            for (int j = 0; j < GRID_SIZE; j++) {
-                System.out.print("|"+grid[i][j]);
+        for (int y = GRID_SIZE-1; y >= 0; y--) {
+            for (int x = 0; x < GRID_SIZE; x++) {
+                System.out.print("|"+x+y);
             }
             System.out.println("|");
         }
@@ -111,16 +114,12 @@ public class Game {
             System.out.println(arr[0] + " " + arr[1]);
         }
 
-//        System.out.println("____________________");
-//        for (int i = 0; i < GRID_SIZE; i++) {
-//            for (int j = 0; j < GRID_SIZE; j++) {
-//                if(shots.contains(new int[]{i,j})){
-//                }
-//                System.out.print("|"+ ' ');
-//            }
-//            System.out.println("|");
-//        }
-//        System.out.println("____________________");
+        for (int y = GRID_SIZE-1; y >= 0; y--) {
+            for (int x = 0; x < GRID_SIZE; x++) {
+                System.out.print("|"+x+y);
+            }
+            System.out.println("|");
+        }
     }
 
     private static void displayGrid(Ship[] fleet){
