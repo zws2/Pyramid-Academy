@@ -2,9 +2,9 @@ package com.company;
 
 public class Ship {
 
-    int size;
-    int[] position;
-    char layout;
+    private int size;
+    private int[] position;
+    private char layout;
 
     public Ship() {
         size = 0;
