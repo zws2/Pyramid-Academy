@@ -4,17 +4,17 @@ import java.util.ArrayList;
 
 public class Player {
     private String name;
-    private Ship[] fleet;
+    private ArrayList<Ship> fleet;
     private ArrayList<int[]> shots;
     private Player enemy;
 
     public Player() {
         name = "";
-        fleet = new Ship[Game.STARTING_FLEET_SIZE];
+        fleet = new ArrayList<Ship>();
         shots = new ArrayList<int[]>();
     }
 
-    public Player(String name, Ship[] fleet, ArrayList<int[]> shots, Player enemy) {
+    public Player(String name, ArrayList<Ship> fleet, ArrayList<int[]> shots, Player enemy) {
         this.name = name;
         this.fleet = fleet;
         this.shots = shots;
@@ -33,11 +33,11 @@ public class Player {
         this.name = name;
     }
 
-    public Ship[] getFleet() {
+    public ArrayList<Ship> getFleet() {
         return fleet;
     }
 
-    public void setFleet(Ship[] fleet) {
+    public void setFleet(ArrayList<Ship> fleet) {
         this.fleet = fleet;
     }
 

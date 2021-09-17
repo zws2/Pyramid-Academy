@@ -12,7 +12,7 @@ public class Game {
 
     private static Scanner scanner;
 
-    public static void initGame(){
+    public static void playGame(){
         scanner = new Scanner(System.in);
         String input = "";
 
@@ -24,6 +24,9 @@ public class Game {
 
             p1.setName(askName("one"));
             p1.setName(askName("two"));
+
+            p1.getFleet().add(new Ship(3, new int[]{0,0}, 'v'));
+            p2.getFleet().add(new Ship(3, new int[]{0,0}, 'v'));
 
             do {
                 takeTurn(p1);
@@ -47,7 +50,7 @@ public class Game {
         } while (!input.matches("[1-9][1-9]"));
 
         p.attack(input);
-        displayGrid();
+        displayHiddenGrid(p.getShots(), p.getFleet());
     }
 
     private static String askName(String s){
@@ -94,15 +97,30 @@ public class Game {
         System.out.println("____________________");
     }
 
-    private static void displayGrid(ArrayList<int[]> shots){
-        System.out.println("____________________");
-        for (int i = 0; i < GRID_SIZE; i++) {
-            for (int j = 0; j < GRID_SIZE; j++) {
-                System.out.print("|"+grid[i][j]);
-            }
-            System.out.println("|");
+    private static void displayHiddenGrid(ArrayList<int[]> shots, ArrayList<Ship> enemyFleet){
+
+
+        ArrayList<int[]> shipPositions = new ArrayList<int[]>();
+        for(Ship s: enemyFleet){
+            System.out.println("ship");
+            shipPositions.addAll(s.getCoords());
         }
-        System.out.println("____________________");
+
+        System.out.println("Displaying coords for ships");
+        for(int[] arr: shipPositions){
+            System.out.println(arr[0] + " " + arr[1]);
+        }
+
+//        System.out.println("____________________");
+//        for (int i = 0; i < GRID_SIZE; i++) {
+//            for (int j = 0; j < GRID_SIZE; j++) {
+//                if(shots.contains(new int[]{i,j})){
+//                }
+//                System.out.print("|"+ ' ');
+//            }
+//            System.out.println("|");
+//        }
+//        System.out.println("____________________");
     }
 
     private static void displayGrid(Ship[] fleet){
