@@ -1,5 +1,6 @@
 package com.company;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Game {
@@ -25,6 +26,15 @@ public class Game {
                 System.out.println("Player one enter name: ");
                 input = scanner.nextLine();
             } while (!input.matches("[a-zA-Z]{1,10}"));
+
+            p1.setName(input);
+
+            do {
+                System.out.println("Player two enter name: ");
+                input = scanner.nextLine();
+            } while (!input.matches("[a-zA-Z]{1,10}"));
+
+            p2.setName(input);
 
             do {
 
@@ -80,6 +90,28 @@ public class Game {
     }
 
     private static void displayGrid(){
+        System.out.println("____________________");
+        for (int i = 0; i < GRID_SIZE; i++) {
+            for (int j = 0; j < GRID_SIZE; j++) {
+                System.out.print("|"+grid[i][j]);
+            }
+            System.out.println("|");
+        }
+        System.out.println("____________________");
+    }
+
+    private static void displayGrid(ArrayList<int[]> shots){
+        System.out.println("____________________");
+        for (int i = 0; i < GRID_SIZE; i++) {
+            for (int j = 0; j < GRID_SIZE; j++) {
+                System.out.print("|"+grid[i][j]);
+            }
+            System.out.println("|");
+        }
+        System.out.println("____________________");
+    }
+
+    private static void displayGrid(Ship[] fleet){
         System.out.println("____________________");
         for (int i = 0; i < GRID_SIZE; i++) {
             for (int j = 0; j < GRID_SIZE; j++) {
