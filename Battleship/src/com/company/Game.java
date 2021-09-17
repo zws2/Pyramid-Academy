@@ -7,6 +7,7 @@ public class Game {
     private static char[][] grid;
     private static boolean gameOver = false;
     public static final int GRID_SIZE = 10;
+    public static final int STARTING_FLEET_SIZE = 5;
 
     public static void initGame(){
         initGrid();
@@ -17,24 +18,36 @@ public class Game {
         do {
             initGrid();
 
+            Player p1 = new Player();
+            Player p2 = new Player();
+
+            do {
+                System.out.println("Player one enter name: ");
+                input = scanner.nextLine();
+            } while (!input.matches("[a-zA-Z]{1,10}"));
+
             do {
 
-
-
-                System.out.println(g.getName() + " Turn...");
-                g.takeTurn();
-                if(gameOver)break;
-                displayGrid();
-
-                System.out.println(h.getName() + " Turn...");
+                System.out.println(p1.getName() + "'s Turn...");
                 do {
-                    System.out.println("Please enter a direction: ");
+                    System.out.println("Please enter coordinates: ");
                     input = scanner.nextLine();
-                } while (!input.matches("[nsewNSEW]"));
+                } while (!input.matches("[1-9][1-9]"));
 
-                h.attemptMove(getCoords(input));
+                p1.attack(input);
                 if(gameOver)break;
                 displayGrid();
+
+                System.out.println(p2.getName() + "'s Turn...");
+                do {
+                    System.out.println("Please enter coordinates: ");
+                    input = scanner.nextLine();
+                } while (!input.matches("[1-9][1-9]"));
+
+                p2.attack(input);
+                if(gameOver)break;
+                displayGrid();
+
             } while (!gameOver);
 
             System.out.println("Game over");
@@ -85,14 +98,6 @@ public class Game {
 
     public static void setGrid(char[][] grid) {
         Game.grid = grid;
-    }
-
-    private static int[] getCoords(String s){
-        if(s.charAt(0) == 'n') return new int[]{1,0};
-        else if(s.charAt(0) == 's') return new int[]{-1,0};
-        else if(s.charAt(0) == 'e') return new int[]{0,1};
-        else if(s.charAt(0) == 'w') return new int[]{0,-1};
-        else return new int[] {0,0};
     }
 }
 
