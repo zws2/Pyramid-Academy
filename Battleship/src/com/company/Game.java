@@ -77,8 +77,6 @@ public class Game {
             }
         }
 
-        grid[0][9] = 'X';
-        grid[9][0] = 'O';
     }
 
     private static void displayGrid(){
