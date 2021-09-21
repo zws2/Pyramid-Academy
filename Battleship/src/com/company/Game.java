@@ -55,7 +55,9 @@ public class Game {
         displayShotGrid(p);
         do {
             System.out.println("Please enter coordinates: ");
-            input = scanner.nextLine();
+            try{
+                input = scanner.nextLine();
+            }catch(Exception ignored){}
         } while (!input.matches("[0-9][0-9]"));
         p.attack(input);
     }
@@ -64,7 +66,9 @@ public class Game {
         String input = "";
         do {
             System.out.println("Player " + s + " enter name: ");
-            input = scanner.nextLine();
+            try{
+                input = scanner.nextLine();
+            }catch(Exception ignored){}
         } while (!input.matches("[a-zA-Z]{1,10}"));
 
         return input;
@@ -76,7 +80,9 @@ public class Game {
 
         String input = "";
         do{
-            input = scanner.nextLine();
+            try{
+                input = scanner.nextLine();
+            }catch(Exception ignored){}
             input = input.toLowerCase();
         }while(!input.equals("yes") && !input.equals("no")
                 &&!input.equals("y") && !input.equals("n"));
@@ -109,7 +115,9 @@ public class Game {
 
             do {
                 System.out.println("Please enter coordinates: ");
-                input = scanner.nextLine();
+                try{
+                    input = scanner.nextLine();
+                }catch(Exception ignored){}
             } while (!input.matches("[0-9][0-9]"));
 
             int[] shot = new int[]{Character.getNumericValue(input.charAt(0)),
@@ -117,7 +125,9 @@ public class Game {
 
             do {
                 System.out.println("Please enter h or v: ");
-                input = scanner.nextLine();
+                try{
+                    input = scanner.nextLine();
+                }catch(Exception ignored){}
             } while (!input.matches("[hv]"));
 
             p.getFleet().add(new Ship(size, shot, input.charAt(0)));

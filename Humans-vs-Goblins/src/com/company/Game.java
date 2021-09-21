@@ -12,7 +12,7 @@ public class Game {
         initGrid();
 
         Scanner scanner = new Scanner(System.in);
-        String input;
+        String input = "";
 
         Goblin g = new Goblin();
         Human h = new Human();
@@ -33,7 +33,9 @@ public class Game {
                 System.out.println(h.getName() + " Turn...");
                 do {
                     System.out.println("Please enter a direction: ");
-                    input = scanner.nextLine();
+                    try{
+                        input = scanner.nextLine();
+                    }catch(Exception ignored){}
                 } while (!input.matches("[nsewNSEW]"));
 
                 h.attemptMove(getCoords(input));
@@ -45,7 +47,9 @@ public class Game {
             System.out.println("Do you want to play again? (yes or no)");
 
             do{
-                input = scanner.nextLine();
+                try{
+                    input = scanner.nextLine();
+                }catch(Exception ignored){}
                 input = input.toLowerCase();
             }while(!input.equals("yes") && !input.equals("no")
                     &&!input.equals("y") && !input.equals("n"));

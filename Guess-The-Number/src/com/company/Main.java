@@ -12,7 +12,9 @@ public class Main {
         Random rand = new Random();
 
         System.out.println("Hello! What is your name?");
-        String name = scanner.nextLine();
+        try{
+            String name = scanner.nextLine();
+        }catch(Exception ignored){}
 
         String playAgain = "y";
 

@@ -23,7 +23,7 @@ public class Main {
     private static void playHangman(){
 
         Scanner scanner = new Scanner(System.in);
-        String input;
+        String input = "";
         String revealed_codeword;
 
         String playAgain = "yes";
@@ -38,7 +38,9 @@ public class Main {
 
                 boolean loop = true;
                 while(loop){
-                    input = scanner.nextLine();
+                    try{
+                        input = scanner.nextLine();
+                    }catch(Exception ignored){}
                     input = input.toLowerCase();
 
                     //make sure it is a single letter and that the player hasnt already guessed the letter
@@ -67,7 +69,9 @@ public class Main {
                 if(has_looped) System.out.println("please enter yes or no");
                 System.out.println("Do you want to play again? (yes or no)");
 
-                input = scanner.nextLine();
+                try{
+                    input = scanner.nextLine();
+                }catch(Exception ignored){}
                 input = input.toLowerCase();
             }while(!(input.equals("yes") || input.equals("no") || input.equals("y") || input.equals("n")));
 

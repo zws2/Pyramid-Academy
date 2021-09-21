@@ -18,7 +18,7 @@ public class Main {
     private static void initGame(){
 
         Scanner scanner = new Scanner(System.in);
-        String input;
+        String input = "";
 
         do {
             initBoard();
@@ -27,7 +27,9 @@ public class Main {
                     "Do you want to be X or O?\n");
 
             do {
-                input = scanner.nextLine();
+                try{
+                    input = scanner.nextLine();
+                }catch(Exception ignored){}
             } while (!input.matches("[xoXO]"));
             input = input.toUpperCase();
             player_token = input.charAt(0);
@@ -39,7 +41,9 @@ public class Main {
 
                 do {
                     do {
-                        input = scanner.nextLine();
+                        try{
+                            input = scanner.nextLine();
+                        }catch(Exception ignored){}
                     } while (!input.matches("[1-9]"));
                 } while (board[Integer.parseInt(input) - 1] != ' ');
                 board[Integer.parseInt(input) - 1] = player_token;
@@ -50,7 +54,9 @@ public class Main {
             System.out.println("Do you want to play again? (yes or no)");
 
             do{
-                input = scanner.nextLine();
+                try{
+                    input = scanner.nextLine();
+                }catch(Exception ignored){}
                 input = input.toLowerCase();
             }while(!input.equals("yes") && !input.equals("no")
                     &&!input.equals("y") && !input.equals("n"));

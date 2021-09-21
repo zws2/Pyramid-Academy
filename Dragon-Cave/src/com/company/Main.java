@@ -12,7 +12,9 @@ public class Main {
                 "Which cave will you go into? (1 or 2)\n");
 
         Scanner scanner = new Scanner(System.in);
-        String input = scanner.nextLine();
+        try{
+            String input = scanner.nextLine();
+        }catch(Exception ignored){}
 
         if(input.equals("1")){
             System.out.print("You enter the cave...\n" +
