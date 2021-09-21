@@ -7,7 +7,7 @@ public class Game {
 
     private static char[][] grid;
     public static final int GRID_SIZE = 10;
-    public static final int STARTING_FLEET_SIZE = 1;
+    public static final int STARTING_FLEET_SIZE = 5;
 
     private static Scanner scanner;
 
@@ -52,14 +52,12 @@ public class Game {
     private static void giveTurn(Player p){
         String input = "";
         System.out.println(p.getName() + "'s Turn...");
-        displayFleetGrid(p);
         displayShotGrid(p);
         do {
             System.out.println("Please enter coordinates: ");
             input = scanner.nextLine();
         } while (!input.matches("[0-9][0-9]"));
         p.attack(input);
-        displayShotGrid(p);
     }
 
     private static String askName(String s){
