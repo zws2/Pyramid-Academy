@@ -1,14 +1,11 @@
 package com.company;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
 
     public static void main(String[] args) {
-	// write your code here
         init();
-
     }
 
     private static Scanner scanner;
@@ -18,7 +15,6 @@ public class Main {
         String mode = "";
         String message = "";
         int shift = 0;
-
 
         do {
 
@@ -75,11 +71,6 @@ public class Main {
         }
 
         StringBuilder output = new StringBuilder();
-        //26 * 2 = 52
-        //A-Z 65-90
-        //a-z 97-122
-        //ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz
-
         for (int i = 0; i < message.length(); i++) {
             char c = message.charAt(i);
             char nc = message.charAt(i);
