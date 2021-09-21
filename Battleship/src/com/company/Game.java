@@ -52,16 +52,14 @@ public class Game {
     private static void takeTurn(Player p){
         String input = "";
         System.out.println(p.getName() + "'s Turn...");
+        displayShotGrid(p);
         do {
             System.out.println("Please enter coordinates: ");
             input = scanner.nextLine();
-        } while (!input.matches("[1-9][1-9]"));
+        } while (!input.matches("[0-9][0-9]"));
 
         p.attack(input);
-
-        Player e = p.getEnemy();
-        displayShotGrid(p.getShots(), e.getFleet());
-        displayFleetGrid(e.getShots(), p.getFleet());
+        displayFleetGrid(p);
     }
 
     private static String askName(String s){
@@ -109,19 +107,19 @@ public class Game {
         System.out.println("____________________");
     }
 
-    private static void displayShotGrid(ArrayList<int[]> shots, ArrayList<Ship> enemyFleet){
+    private static void displayShotGrid(Player p){
 
         ArrayList<int[]> shipPositions = new ArrayList<int[]>();
-        for(Ship s: enemyFleet){
+        for(Ship s: p.getEnemy().getFleet()){
             shipPositions.addAll(s.getCoords());
         }
 
-        System.out.println("--------------------");
+        System.out.println("---" + p.getName() + "'s Shots---");
         for (int y = GRID_SIZE-1; y >= 0; y--) {
             for (int x = 0; x < GRID_SIZE; x++) {
                 if(intListContains(shipPositions, new int[]{x,y})
-                    && intListContains(shots, new int[]{x,y})) System.out.print("|X");
-                else if(intListContains(shots, new int[]{x,y})) System.out.print("|O");
+                    && intListContains(p.getShots(), new int[]{x,y})) System.out.print("|X");
+                else if(intListContains(p.getShots(), new int[]{x,y})) System.out.print("|O");
                 else System.out.print("| ");
             }
             System.out.println("|");
@@ -129,16 +127,18 @@ public class Game {
         System.out.println("--------------------");
     }
 
-    private static void displayFleetGrid(ArrayList<int[]> enemyShots, ArrayList<Ship> fleet){
+    private static void displayFleetGrid(Player p){
+
+
         ArrayList<int[]> shipPositions = new ArrayList<int[]>();
-        for(Ship s: fleet){
+        for(Ship s: p.getFleet()){
             shipPositions.addAll(s.getCoords());
         }
-        System.out.println("--------------------");
+        System.out.println("---" + p.getName() + "'s Fleet---");
         for (int y = GRID_SIZE-1; y >= 0; y--) {
             for (int x = 0; x < GRID_SIZE; x++) {
                 if(intListContains(shipPositions, new int[]{x,y})
-                        && intListContains(enemyShots, new int[]{x,y})) System.out.print("|*");
+                        && intListContains(p.getEnemy().getShots(), new int[]{x,y})) System.out.print("|*");
                 else if(intListContains(shipPositions, new int[]{x,y})) System.out.print("|@");
                 else System.out.print("| ");
             }
