@@ -26,15 +26,10 @@ public class Game {
             p2.setEnemy(p1);
 
             p1.setName(askName("one"));
-            p1.setName(askName("two"));
+            p2.setName(askName("two"));
 
-            p1.getFleet().add(new Ship(3, new int[]{0,0}, 'v'));
-            p1.getFleet().add(new Ship(3, new int[]{0,1}, 'v'));
-
-            p1.addShot(new int[]{0,0});
-            p1.addShot(new int[]{7,7});
-
-            p2.getFleet().add(new Ship(3, new int[]{0,0}, 'v'));
+            placeFleet(p1);
+            placeFleet(p2);
 
             do {
                 takeTurn(p1);
@@ -94,6 +89,39 @@ public class Game {
         }
 
         displayGrid();
+    }
+
+    private static void placeFleet(Player p){
+        String input = "";
+        for (int i = 1; i <= 5; i++) {
+            System.out.println(p.getName() + ", place ship " + i);
+            displayFleetGrid(p);
+
+            int size = 0;
+            if(i==1) size = 2;
+            else if(i==2 || i==3) size = 3;
+            else if(i==4) size = 4;
+            else if(i==5) size = 5;
+            else return;
+
+            do {
+                System.out.println("Please enter coordinates: ");
+                input = scanner.nextLine();
+            } while (!input.matches("[0-9][0-9]"));
+
+            int[] shot = new int[]{Character.getNumericValue(input.charAt(0)),
+                    Character.getNumericValue(input.charAt(1))};
+
+            do {
+                System.out.println("Please enter h or v: ");
+                input = scanner.nextLine();
+            } while (!input.matches("[hv]"));
+
+            p.getFleet().add(new Ship(size, shot, input.charAt(0)));
+
+        }
+        System.out.println("All ships added for " + p.getName());
+        displayFleetGrid(p);
     }
 
     private static void displayGrid(){
