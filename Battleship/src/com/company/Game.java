@@ -22,11 +22,17 @@ public class Game {
             Player p1 = new Player();
             Player p2 = new Player();
 
+            p1.setEnemy(p2);
+            p2.setEnemy(p1);
+
             p1.setName(askName("one"));
             p1.setName(askName("two"));
 
             p1.getFleet().add(new Ship(3, new int[]{0,0}, 'v'));
             p1.getFleet().add(new Ship(3, new int[]{0,1}, 'v'));
+
+            p1.addShot(new int[]{0,0});
+            p1.addShot(new int[]{7,7});
 
             p2.getFleet().add(new Ship(3, new int[]{0,0}, 'v'));
 
@@ -52,8 +58,10 @@ public class Game {
         } while (!input.matches("[1-9][1-9]"));
 
         p.attack(input);
-        displayGrid();
-        //displayHiddenGrid(p.getShots(), p.getFleet());
+
+        Player e = p.getEnemy();
+        displayShotGrid(p.getShots(), e.getFleet());
+        displayFleetGrid(e.getShots(), p.getFleet());
     }
 
     private static String askName(String s){
@@ -87,6 +95,7 @@ public class Game {
             }
         }
 
+        displayGrid();
     }
 
     private static void displayGrid(){
@@ -100,37 +109,61 @@ public class Game {
         System.out.println("____________________");
     }
 
-    private static void displayHiddenGrid(ArrayList<int[]> shots, ArrayList<Ship> enemyFleet){
-
+    private static void displayShotGrid(ArrayList<int[]> shots, ArrayList<Ship> enemyFleet){
 
         ArrayList<int[]> shipPositions = new ArrayList<int[]>();
         for(Ship s: enemyFleet){
-            System.out.println("ship");
             shipPositions.addAll(s.getCoords());
         }
 
-        System.out.println("Displaying coords for ships");
-        for(int[] arr: shipPositions){
-            System.out.println(arr[0] + " " + arr[1]);
-        }
-
+        System.out.println("--------------------");
         for (int y = GRID_SIZE-1; y >= 0; y--) {
             for (int x = 0; x < GRID_SIZE; x++) {
-                System.out.print("|"+x+y);
+                if(intListContains(shipPositions, new int[]{x,y})
+                    && intListContains(shots, new int[]{x,y})) System.out.print("|X");
+                else if(intListContains(shots, new int[]{x,y})) System.out.print("|O");
+                else System.out.print("| ");
             }
             System.out.println("|");
         }
+        System.out.println("--------------------");
     }
 
-    private static void displayGrid(Ship[] fleet){
-        System.out.println("____________________");
-        for (int i = 0; i < GRID_SIZE; i++) {
-            for (int j = 0; j < GRID_SIZE; j++) {
-                System.out.print("|"+grid[i][j]);
+    private static void displayFleetGrid(ArrayList<int[]> enemyShots, ArrayList<Ship> fleet){
+        ArrayList<int[]> shipPositions = new ArrayList<int[]>();
+        for(Ship s: fleet){
+            shipPositions.addAll(s.getCoords());
+        }
+        System.out.println("--------------------");
+        for (int y = GRID_SIZE-1; y >= 0; y--) {
+            for (int x = 0; x < GRID_SIZE; x++) {
+                if(intListContains(shipPositions, new int[]{x,y})
+                        && intListContains(enemyShots, new int[]{x,y})) System.out.print("|*");
+                else if(intListContains(shipPositions, new int[]{x,y})) System.out.print("|@");
+                else System.out.print("| ");
             }
             System.out.println("|");
         }
-        System.out.println("____________________");
+        System.out.println("--------------------");
+    }
+
+    public static boolean intListContains(ArrayList<int[]> list, int[] pos){
+        for(int[] arr: list){
+            if(arr[0] == pos[0] && arr[1] == pos[1]) return true;
+        }
+        return false;
+    }
+
+    public static boolean shipListContains(ArrayList<Ship> fleet, int[] pos){
+        ArrayList<int[]> shipPositions = new ArrayList<int[]>();
+        for(Ship s: fleet){
+            shipPositions.addAll(s.getCoords());
+        }
+
+        for(int[] arr: shipPositions){
+            if(arr[0] == pos[0] && arr[1] == pos[1]) return true;
+        }
+        return false;
     }
 
     public static char[][] getGrid() {

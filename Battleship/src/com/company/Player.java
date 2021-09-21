@@ -22,7 +22,10 @@ public class Player {
     }
 
     public void attack(String coords){
-
+        int[] shot = new int[]{coords.charAt(0), coords.charAt(1)};
+        shots.add(shot);
+        if(Game.shipListContains(enemy.getFleet(), shot)) System.out.println("Hit!");
+        else System.out.println("Miss!");
     }
 
     public String getName() {
@@ -47,6 +50,10 @@ public class Player {
 
     public void setShots(ArrayList<int[]> shots) {
         this.shots = shots;
+    }
+
+    public void addShot(int[] shot){
+        shots.add(shot);
     }
 
     public Player getEnemy() {
