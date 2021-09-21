@@ -6,9 +6,8 @@ import java.util.Scanner;
 public class Game {
 
     private static char[][] grid;
-    private static boolean gameOver = false;
     public static final int GRID_SIZE = 10;
-    public static final int STARTING_FLEET_SIZE = 5;
+    public static final int STARTING_FLEET_SIZE = 1;
 
     private static Scanner scanner;
 
@@ -32,29 +31,35 @@ public class Game {
             placeFleet(p2);
 
             do {
-                takeTurn(p1);
-                if(gameOver)break;
+                giveTurn(p1);
+                if(p2.checkIfLost()){
+                    displayFleetGrid(p2);
+                    break;
+                }
 
-                takeTurn(p2);
-                if(gameOver)break;
-            } while (!gameOver);
+                giveTurn(p2);
+                if(p1.checkIfLost()){
+                    displayFleetGrid(p1);
+                    break;
+                }
+            } while(true);
 
             input = askToPlayAgain();
         }while(input.equals("yes") || input.equals("y"));
         scanner.close();
     }
 
-    private static void takeTurn(Player p){
+    private static void giveTurn(Player p){
         String input = "";
         System.out.println(p.getName() + "'s Turn...");
+        displayFleetGrid(p);
         displayShotGrid(p);
         do {
             System.out.println("Please enter coordinates: ");
             input = scanner.nextLine();
         } while (!input.matches("[0-9][0-9]"));
-
         p.attack(input);
-        displayFleetGrid(p);
+        displayShotGrid(p);
     }
 
     private static String askName(String s){
@@ -93,7 +98,7 @@ public class Game {
 
     private static void placeFleet(Player p){
         String input = "";
-        for (int i = 1; i <= 5; i++) {
+        for (int i = 1; i <= STARTING_FLEET_SIZE; i++) {
             System.out.println(p.getName() + ", place ship " + i);
             displayFleetGrid(p);
 
@@ -156,8 +161,6 @@ public class Game {
     }
 
     private static void displayFleetGrid(Player p){
-
-
         ArrayList<int[]> shipPositions = new ArrayList<int[]>();
         for(Ship s: p.getFleet()){
             shipPositions.addAll(s.getCoords());
