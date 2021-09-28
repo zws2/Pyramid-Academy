@@ -1,5 +1,7 @@
 package com.company;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
@@ -33,7 +35,7 @@ public class Main {
                 System.out.println(codeword_progress);
                 askForGuess();
 
-                codeword_progress = calculateCodewordProgress();
+                calculateCodewordProgressFunc();
                 if(num_letters_revealed == codeword.length()){
                     System.out.printf("Yes! The secret word is \"%s\"! You have won!\n", codeword);
                     break;
@@ -41,7 +43,7 @@ public class Main {
             }
             if(wrong_letters.length() >= MAX_WRONG_GUESSES){
                 drawHangman();
-                System.out.println("You lose!");
+                System.out.printf("You lose!\n The secret word is \"%s\"!\n", codeword);
             }
 
             if(!askToPlayAgain()) break;
@@ -67,10 +69,6 @@ public class Main {
             askForGuess(input);
         }else guessed_letters = guessed_letters + input;
 
-        String finalInput = input;
-        codeword.chars().anyMatch(c -> c == finalInput.charAt(0));
-//        codeword_progress.
-
     }
 
     private static boolean askToPlayAgain(){return askToPlayAgain("");}
@@ -91,77 +89,44 @@ public class Main {
         }
     }
 
-    private static String calculateCodewordProgress(){
-        String str = "";
-        int temp_num_letters_revealed = 0;
+    private static void calculateCodewordProgressFunc(){
 
-        try{
-            for (int i = 0; i < codeword.length(); i++) {
-                String current_letter = codeword.substring(i,i+1);
+        String starting_progress = codeword_progress;
+        codeword_progress = codeword.chars().mapToObj(c -> (char)c + "").reduce("", (s, c) -> {
+            if(guessed_letters.contains(c)){
+                s = s + c;
+            } else s = s + "_";
+            return s;
+        });
 
-                if(guessed_letters.contains(current_letter)){
-                    temp_num_letters_revealed++;
-                    str = str + current_letter;
-                } else str = str + "_";
-            }
+        if(starting_progress.equals(codeword_progress))
+            wrong_letters = wrong_letters + guessed_letters.substring(guessed_letters.length()-1);
 
-            if(guessed_letters.length()>0){
-                if(temp_num_letters_revealed == num_letters_revealed)
-                    wrong_letters = wrong_letters + guessed_letters.substring(guessed_letters.length()-1);
-                else num_letters_revealed = temp_num_letters_revealed;
-            }
-
-        }catch(Exception e) {
-            e.printStackTrace();
-        }
-        return str;
-    }
-
-    private static String calculateCodewordProgressFunc(){
-        String str = "";
-        int temp_num_letters_revealed = 0;
-
-        try{
-            for (int i = 0; i < codeword.length(); i++) {
-                String current_letter = codeword.substring(i,i+1);
-
-                if(guessed_letters.contains(current_letter)){
-                    temp_num_letters_revealed++;
-                    str = str + current_letter;
-                } else str = str + "_";
-            }
-
-            if(guessed_letters.length()>0){
-                if(temp_num_letters_revealed == num_letters_revealed)
-                    wrong_letters = wrong_letters + guessed_letters.substring(guessed_letters.length()-1);
-                else num_letters_revealed = temp_num_letters_revealed;
-            }
-
-        }catch(Exception e) {
-            e.printStackTrace();
-        }
-        return str;
+        num_letters_revealed = (int)codeword_progress.chars().filter(c -> c != '_').count();
     }
 
     private static String generateRandomWord(){
         Random rand = new Random();
-
         ArrayList<String> words = new ArrayList<String>();
-        words.add("cat");
-        words.add("dog");
-        words.add("umbrella");
-        words.add("waterfall");
-        words.add("house");
-        words.add("computer");
-        words.add("java");
-        words.add("flower");
-        words.add("candle");
-        words.add("music");
+
+        Scanner s = null;
+        try{
+            File f = new File("src\\com\\company\\words.txt");
+            s = new Scanner(f);
+
+            while(s.hasNextLine()){
+                words.add(s.nextLine());
+            }
+
+        }catch(IOException e){e.printStackTrace();
+        } finally{
+            if(s!=null) s.close();
+        }
 
         return words.get(rand.nextInt(words.size()));
     }
 
-    private static void drawHangman(){
+    private static void drawHangman1(){
 
         System.out.printf("missed Letters: %s\n", wrong_letters);
 
@@ -217,5 +182,35 @@ public class Main {
                 break;
             default: break;
         }
+    }
+
+    private static void drawHangman(){
+
+        System.out.printf("missed Letters: %s\n", wrong_letters);
+        ArrayList<String> hangman = new ArrayList<String>();
+        Scanner s = null;
+        try{
+            File f = new File("src\\com\\company\\draw.txt");
+            s = new Scanner(f);
+
+            int i=0;
+            while(s.hasNextLine()){
+                String str = s.nextLine();
+                hangman.add(str);
+                if(str.equals("=========")){
+                    if(i == wrong_letters.length()){
+                        break;
+                    }else{
+                        hangman.clear();
+                        i++;
+                    }
+                }
+            }
+
+        }catch(IOException e){e.printStackTrace();
+        } finally{
+            if(s!=null) s.close();
+        }
+        hangman.forEach(System.out::println);
     }
 }
