@@ -126,64 +126,6 @@ public class Main {
         return words.get(rand.nextInt(words.size()));
     }
 
-    private static void drawHangman1(){
-
-        System.out.printf("missed Letters: %s\n", wrong_letters);
-
-        switch(wrong_letters.length()){
-            case 0: System.out.print(
-                    " +--+\n" +
-                            "    |\n" +
-                            "    |\n" +
-                            "    |\n" +
-                            "____|\n");
-                break;
-            case 1: System.out.print(
-                    " +--+\n" +
-                            " O  |\n" +
-                            "    |\n" +
-                            "    |\n" +
-                            "____|\n");
-                break;
-            case 2: System.out.print(
-                    " +--+\n" +
-                            " O  |\n" +
-                            " |  |\n" +
-                            "    |\n" +
-                            "____|\n");
-                break;
-            case 3: System.out.print(
-                    " +--+\n" +
-                            " O  |\n" +
-                            " |  |\n" +
-                            " |  |\n" +
-                            "____|\n");
-                break;
-            case 4: System.out.print(
-                    " +--+\n" +
-                            " O  |\n" +
-                            " |\\ |\n" +
-                            " |  |\n" +
-                            "____|\n");
-                break;
-            case 5: System.out.print(
-                    " +--+\n" +
-                            " O  |\n" +
-                            "/|\\ |\n" +
-                            " |  |\n" +
-                            "____|\n");
-                break;
-            case 6: System.out.print(
-                    " +--+\n" +
-                            " O  |\n" +
-                            "/|\\ |\n" +
-                            "/|  |\n" +
-                            "____|\n");
-                break;
-            default: break;
-        }
-    }
-
     private static void drawHangman(){
 
         System.out.printf("missed Letters: %s\n", wrong_letters);
