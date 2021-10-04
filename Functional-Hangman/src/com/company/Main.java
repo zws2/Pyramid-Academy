@@ -59,7 +59,6 @@ public class Main {
 
     private static void askForGuess(String input){
         System.out.println("Please guess a letter:");
-
         try{
             input = scanner.nextLine();
         }catch(Exception ignored){}
@@ -68,7 +67,6 @@ public class Main {
         if(!input.matches("[a-z]{1}") || guessed_letters.contains(input)){
             askForGuess(input);
         }else guessed_letters = guessed_letters + input;
-
     }
 
     private static boolean askToPlayAgain(){return askToPlayAgain("");}

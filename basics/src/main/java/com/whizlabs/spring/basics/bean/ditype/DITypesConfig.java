@@ -1,0 +1,22 @@
+package com.whizlabs.spring.basics.bean.ditype;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+
+@ComponentScan
+public class DITypesConfig {
+    @Bean
+    public Name getName(){
+        return new Name("Rod", "Johnson");
+    }
+
+    @Bean
+    public Address getAddress(){
+        return new Address("High Street");
+    }
+
+    @Bean
+    public Occupation getOccupation(){
+        return new Occupation("Java Developer");
+    }
+}
