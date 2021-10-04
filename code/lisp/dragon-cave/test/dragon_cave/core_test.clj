@@ -1,6 +1,6 @@
-(ns more-lisp.core-test
+(ns dragon-cave.core-test
   (:require [clojure.test :refer :all]
-            [more-lisp.core :refer :all]))
+            [dragon-cave.core :refer :all]))
 
 (deftest a-test
   (testing "FIXME, I fail."
