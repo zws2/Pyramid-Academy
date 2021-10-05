@@ -31,7 +31,7 @@
       (let [name (greeting)]
         (loop [numGuesses 1]
           (when (< numGuesses 5)
-           (if (and (guessFeedback (askForGuess) num))
+           (if (guessFeedback (askForGuess) num)
              (guessCorrect name numGuesses)
              (recur (+ numGuesses 1))))))
       (if (playAgain)
