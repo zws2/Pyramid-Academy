@@ -29,10 +29,11 @@
   (let [num 10]
     (loop []
       (let [name (greeting)]
-        (loop [numGuesses 0]
-          (if (and (guessFeedback (askForGuess) num) (< numGuesses 5))
-            (guessCorrect name numGuesses)
-            (recur (+ numGuesses 1)))))
+        (loop [numGuesses 1]
+          (when (< numGuesses 5)
+           (if (and (guessFeedback (askForGuess) num))
+             (guessCorrect name numGuesses)
+             (recur (+ numGuesses 1))))))
       (if (playAgain)
         (recur)
         (println "Goodbye")))))
