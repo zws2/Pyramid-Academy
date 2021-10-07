@@ -1,6 +1,4 @@
-(ns hangman.core
-  (:require [clojure.string :as str]))
-
+(ns hangman.core)
 
 (def word-progress "")
 (def missed-letters "")
@@ -44,13 +42,10 @@
                              "/|  |\n"
                              "____|\n")))
 
-
-
 (defn ask-for-guess []
   (println "Guess a letter")
   (let [letter (read-line)]
     letter))
-
 
 (defn calculate-progress [codeword guess]
   (def flag false)
@@ -72,9 +67,7 @@
   (println "Missed letters: " missed-letters)
   (println word-progress))
 
-
 (defn hangman []
-
   (print-hangman 0)
   (let [codeword "hangman"]
     (loop [n 0]
@@ -89,4 +82,5 @@
       (println "You lose!")
       (println "You win!"))
     (println "The secret word was" codeword)))
+
 (hangman)
