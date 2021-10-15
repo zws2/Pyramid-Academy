@@ -2,7 +2,7 @@ package com.example.part.dao;
 
 //IMPORTANT If your code is not working your imports might be incorrect
 
-import com.example.part.entity.Employee;
+import com.example.part.entity.Part;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 @Repository
-public class EmployeeIMPL implements EmployeeDAO {
+public class PartIMPL implements PartDAO {
 
     //Define field for entity manager
     /*The EntityManager API is used to create and remove persistent entity instances,
@@ -22,37 +22,37 @@ public class EmployeeIMPL implements EmployeeDAO {
 
     //Set up constructor injection
     @Autowired
-    public EmployeeIMPL(EntityManager entityManager) {
+    public PartIMPL(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 
     @Override
     @Transactional //Defines the scope of a single database transaction.
-    public List<Employee> findAll() {
+    public List<Part> findAll() {
         Session currentSession = entityManager.unwrap(Session.class);
-        Query<Employee> myQuery = currentSession.createQuery("from Employee");
+        Query<Part> myQuery = currentSession.createQuery("from Part");
         return myQuery.getResultList();
     }
 
     @Override
     @Transactional //Defines the scope of a single database transaction.
-    public Employee findById(int theId) {
+    public Part findById(int theId) {
         Session currentSession = entityManager.unwrap(Session.class);
-        return currentSession.get(Employee.class, theId);
+        return currentSession.get(Part.class, theId);
     }
 
     @Override
     @Transactional //Defines the scope of a single database transaction.
-    public void saveOrUpdate(Employee theEmployee) {
+    public void saveOrUpdate(Part thePart) {
         Session currentSession = entityManager.unwrap(Session.class);
-        currentSession.saveOrUpdate(theEmployee);
+        currentSession.saveOrUpdate(thePart);
     }
 
     @Override
     @Transactional //Defines the scope of a single database transaction.
     public void deleteById(int theId) {
         Session currentSession = entityManager.unwrap(Session.class);
-        Employee myEmployee = currentSession.get(Employee.class, theId);
-        currentSession.delete(myEmployee);
+        Part myPart = currentSession.get(Part.class, theId);
+        currentSession.delete(myPart);
     }
 }
