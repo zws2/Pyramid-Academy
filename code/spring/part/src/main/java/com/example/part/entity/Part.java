@@ -13,16 +13,32 @@ public class Part {
     @Column(name = "id") //This is mapping the primary key to the id column in the table.
     private int id;
 
-    @Column(name = "type") //This will map the jobTitle field to the column named job_title in the table.
+    @Column(name = "type")
     private String type;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "make")
+    private String make;
+
+    @Column(name = "year")
+    private String year;
+
+    @Column(name = "part_condition")
+    private String part_condition;
 
     //default constructor
     public Part() {
     }
 
-    public Part(int id, String type) {
+    public Part(int id, String type, String name, String make, String year, String part_condition) {
         this.id = id;
         this.type = type;
+        this.name = name;
+        this.make = make;
+        this.year = year;
+        this.part_condition = part_condition;
     }
 
     @Override
@@ -30,6 +46,10 @@ public class Part {
         return "Part{" +
                 "id=" + id +
                 ", type='" + type + '\'' +
+                ", name='" + name + '\'' +
+                ", make='" + make + '\'' +
+                ", year='" + year + '\'' +
+                ", condition='" + part_condition + '\'' +
                 '}';
     }
 
@@ -47,5 +67,37 @@ public class Part {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getMake() {
+        return make;
+    }
+
+    public void setMake(String make) {
+        this.make = make;
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+
+    public String getPart_condition() {
+        return part_condition;
+    }
+
+    public void setPart_condition(String part_condition) {
+        this.part_condition = part_condition;
     }
 }
