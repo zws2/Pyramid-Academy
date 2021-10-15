@@ -32,8 +32,8 @@ public class Part {
     public Part() {
     }
 
-    public Part(int id, String type, String name, String year, String manufacturer, String condition) {
-        this.id = id;
+    public Part(String type, String name, String year, String manufacturer, String condition) {
+//        this.id = id;
         this.type = type;
         this.name = name;
         this.year = year;
