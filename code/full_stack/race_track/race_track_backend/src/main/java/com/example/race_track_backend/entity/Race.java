@@ -34,8 +34,8 @@ public class Race {
         this.id = id;
         this.title = title;
         this.time = time;
-        this.horses = horses;
-        this.results = results;
+        this.horses = horses;//json.parse
+        this.results = results;//json.parse
     }
 
     @Override

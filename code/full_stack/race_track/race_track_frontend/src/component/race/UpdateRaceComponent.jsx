@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import PetDataService from '../../service/PetDataService'
+import RaceDataService from '../../service/RaceDataService'
 import FooterComponent from '../header_footer/FooterComponent';
 
-class UpdatePetComponent extends Component {
+class UpdateRaceComponent extends Component {
     constructor(props) {
         super(props)
 
@@ -20,7 +20,7 @@ class UpdatePetComponent extends Component {
     }
 
     componentDidMount(){
-        PetDataService.retrievePet(this.props.match.params.id)
+        RaceDataService.retrieveRace(this.props.match.params.id)
             .then(
                 response => {
                     this.setState({
@@ -60,15 +60,15 @@ class UpdatePetComponent extends Component {
         preview.src.indexOf(",") + 1,
         preview.src.length)
 
-        let pet = {
+        let race = {
             id: this.state.id,
             title: this.state.title,
             caption: this.state.caption,
             contributor: this.state.contributor,
             img: image_source
         }
-        PetDataService.updatePet(pet)
-            .then(this.props.history.push(`/petRegistry`))
+        RaceDataService.updateRace(race)
+            .then(this.props.history.push(`/raceRegistry`))
     }
 
 
@@ -79,7 +79,7 @@ class UpdatePetComponent extends Component {
         return(
             <div>
                 <div className="jumbotron" style={{height:"50px", backgroundColor: "gray"}}>
-                    <h3 style={{textAlign: "center"}}>Update Pet</h3>
+                    <h3 style={{textAlign: "center"}}>Update Race</h3>
                 </div>
                 <div className="container">
                     <form onSubmit={this.handleSubmit}>
@@ -110,4 +110,4 @@ class UpdatePetComponent extends Component {
     }
 }
 
-export default UpdatePetComponent
+export default UpdateRaceComponent

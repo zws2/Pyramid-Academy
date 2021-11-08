@@ -1,26 +1,26 @@
 import React, { Component } from 'react';
-import PetDataService from '../../service/PetDataService';
+import RaceDataService from '../../service/RaceDataService';
 import FooterComponent from '../header_footer/FooterComponent';
 
 class WelcomeComponent extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            pets: []
+            races: []
         }
-        this.refreshPetRegistry = this.refreshPetRegistry.bind(this)
+        this.refreshRaceRegistry = this.refreshRaceRegistry.bind(this)
     }
 
     componentDidMount() {
-            this.refreshPetRegistry();
+            this.refreshRaceRegistry();
     }
 
-    refreshPetRegistry() {
-        PetDataService.retrieveAllPets()
+    refreshRaceRegistry() {
+        RaceDataService.retrieveAllRaces()
         .then(
             response => {
                 this.setState({
-                    pets: response.data,
+                    races: response.data,
                 })
             }
         )
@@ -28,19 +28,19 @@ class WelcomeComponent extends Component {
 
     render() {
 
-        const pet = this.state.pets[Math.floor(Math.random() * this.state.pets.length)]
+        const race = this.state.races[Math.floor(Math.random() * this.state.races.length)]
 
         return(         
             <div className="image_container">
             {
-                pet &&
+                race &&
                     <div >
-                        <h1 style={{textAlign: "center"}}>{pet.title}</h1>
+                        <h1 style={{textAlign: "center"}}>{race.title}</h1>
                         <div className="imgbox">
-                            <img className="img-fluid center-fit" alt={pet.caption} src={"data:image/png;base64," + pet.img} />
+                            <img className="img-fluid center-fit" alt={race.caption} src={"data:image/png;base64," + race.img} />
                         </div>
-                        <p style={{textAlign:"center"}}>{pet.caption}</p>
-                        <p style={{textAlign:"center"}}>Contributor: {pet.contributor}</p>
+                        <p style={{textAlign:"center"}}>{race.caption}</p>
+                        <p style={{textAlign:"center"}}>Contributor: {race.contributor}</p>
                     </div >
             }
                 <FooterComponent />

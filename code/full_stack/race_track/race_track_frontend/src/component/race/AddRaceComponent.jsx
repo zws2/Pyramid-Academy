@@ -1,8 +1,8 @@
 import React, {Component} from 'react'
-import PetDataService, {submitPet} from '../../service/PetDataService'
+import RaceDataService, {submitRace} from '../../service/RaceDataService'
 import FooterComponent from '../header_footer/FooterComponent';
 
-class AddPetComponent extends Component {
+class AddRaceComponent extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -44,7 +44,7 @@ class AddPetComponent extends Component {
         preview.src.indexOf(",") + 1,
         preview.src.length)
 
-        let pet = {
+        let race = {
             id: this.state.id,
             title: this.state.title,
             caption: this.state.caption,
@@ -52,17 +52,17 @@ class AddPetComponent extends Component {
             img: image_source
         }
 
-        PetDataService.addPet(pet)
-            .then(this.props.history.push(`/petRegistry`))
+        RaceDataService.addRace(race)
+            .then(this.props.history.push(`/raceRegistry`))
 
-//         submitPet(pet).then(this.props.history.push(`/petRegistry`))
+//         submitRace(race).then(this.props.history.push(`/raceRegistry`))
     }
 
     render() {
         return(
             <div>
                 <div className="jumbotron" style={{height: "50px", backgroundColor: "gray"}}>
-                <h3 style={{textAlign: "center"}}>Add Pet</h3>
+                <h3 style={{textAlign: "center"}}>Add Race</h3>
                 </div>
                 <div className="container">
                     <form onSubmit={this.handleSubmit}>
@@ -93,4 +93,4 @@ class AddPetComponent extends Component {
     }
 }
 
-export default AddPetComponent
+export default AddRaceComponent
