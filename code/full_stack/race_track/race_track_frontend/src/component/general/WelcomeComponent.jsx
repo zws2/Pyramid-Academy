@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import RaceDataService from '../../service/RaceDataService';
 import FooterComponent from '../header_footer/FooterComponent';
+import pic from './horse.jpg';
 
 class WelcomeComponent extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            races: []
+            races: [],
+            user: []
         }
         this.refreshRaceRegistry = this.refreshRaceRegistry.bind(this)
     }
@@ -20,7 +22,7 @@ class WelcomeComponent extends Component {
         .then(
             response => {
                 this.setState({
-                    races: response.data,
+                    races: response.data
                 })
             }
         )
@@ -28,23 +30,14 @@ class WelcomeComponent extends Component {
 
     render() {
 
-        const race = this.state.races[Math.floor(Math.random() * this.state.races.length)]
-
-        return(         
-            <div className="image_container">
-            {
-                race &&
-                    <div >
-                        <h1 style={{textAlign: "center"}}>{race.title}</h1>
-                        <div className="imgbox">
-                            <img className="img-fluid center-fit" alt={race.caption} src={"data:image/png;base64," + race.img} />
-                        </div>
-                        <p style={{textAlign:"center"}}>{race.caption}</p>
-                        <p style={{textAlign:"center"}}>Contributor: {race.contributor}</p>
-                    </div >
-            }
+        return(
+            <div >
+                <h1 style={{textAlign:"center"}}>Welcome to the Races!</h1>
+                <div className="imgbox">
+                    <img className="img-fluid center-fit" alt="a weiner dog running" src={pic}/>
+                </div>
                 <FooterComponent />
-            </div>
+            </div >
         )
     }
 }

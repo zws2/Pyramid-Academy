@@ -8,13 +8,13 @@ class FooterComponent extends Component {
         if(isRegistry){
             return(
                 <footer className="registryFooter">
-                     <span className="text-muted">Random Races!</span>
+                     <span className="text-muted">Zachary Snyder</span>
                  </footer>
              )
         }else{
             return(
                 <footer className="footer">
-                    <span className="text-muted">Random Races!</span>
+                    <span className="text-muted">Zachary Snyder</span>
                 </footer>
             )
         }

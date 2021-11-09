@@ -75,10 +75,10 @@ class RaceRegistryComponent extends Component {
                                    race =>
                                    <tr style={{textAlign: "center"}} key={race.id}>
                                        <td>{race.id}</td>
-                                       <td>{race.title}</td>
-                                       <td>{race.caption}</td>
-                                       <td>{race.contributor}</td>
-                                       <td><button className="btn btn-warning" onClick={() => this.deleteRaceClicked(race.id, race.title, race.caption)}>Delete</button></td>
+                                       <td>{race.time}</td>
+                                       <td>{race.horses}</td>
+                                       <td>{race.results}</td>
+                                       <td><button className="btn btn-warning" onClick={() => this.deleteRaceClicked(race.id, race.time, race.horses)}>Delete</button></td>
                                        <td><button className="btn btn-success" onClick={() => this.upDateRaceClicked(race)}>Update</button></td>
                                    </tr>
                                )
