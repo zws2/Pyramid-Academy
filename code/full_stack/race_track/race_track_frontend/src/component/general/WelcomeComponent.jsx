@@ -1,45 +1,36 @@
-import React, { Component } from 'react';
-import RaceDataService from '../../service/RaceDataService';
+import React, { useState, useEffect }  from 'react';
+import HeaderComponent, {Login, Logout} from '../header_footer/HeaderComponent';
 import FooterComponent from '../header_footer/FooterComponent';
 import pic from './horse.jpg';
 
-class WelcomeComponent extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            races: [],
-            user: []
+export default function WelcomeComponent(){
+
+    const [user, setUser] = useState({username: "", email: "", password: ""})
+
+    useEffect(() => {
+        const stored_user = JSON.parse(window.localStorage.getItem('user'));
+        if(stored_user !== null){
+            setUser(stored_user)
         }
-        this.refreshRaceRegistry = this.refreshRaceRegistry.bind(this)
-    }
+        }, []);
 
-    componentDidMount() {
-            this.refreshRaceRegistry();
-    }
+    return(
+        <div>
+            <HeaderComponent />
+            <div className="WelcomeComponent">
+                <div className="welcome">
+                    {(user.username !== "") ? (
 
-    refreshRaceRegistry() {
-        RaceDataService.retrieveAllRaces()
-        .then(
-            response => {
-                this.setState({
-                    races: response.data
-                })
-            }
-        )
-    }
-
-    render() {
-
-        return(
-            <div >
-                <h1 style={{textAlign:"center"}}>Welcome to the Races!</h1>
-                <div className="imgbox">
-                    <img className="img-fluid center-fit" alt="a weiner dog running" src={pic}/>
+                        <h2 style={{textAlign:"center"}}>Welcome to the Races {user.username}!</h2>
+                        ) : (
+                        <h2 style={{textAlign:"center"}}>Please log in.</h2>
+                    )}
+                    <div className="imgbox">
+                        <img className="img-fluid center-fit" alt="a weiner dog running" src={pic}/>
+                    </div>
                 </div>
-                <FooterComponent />
             </div >
-        )
-    }
+            <FooterComponent />
+        </div>
+    )
 }
-
-export default WelcomeComponent;  

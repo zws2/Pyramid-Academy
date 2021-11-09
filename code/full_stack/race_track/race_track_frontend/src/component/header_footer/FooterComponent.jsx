@@ -2,9 +2,7 @@ import React, { Component } from 'react'
 
 class FooterComponent extends Component {
     render() {
-
         const isRegistry = window.location.href.includes("raceRegistry")
-        console.log(isRegistry)
         if(isRegistry){
             return(
                 <footer className="registryFooter">
