@@ -1,39 +1,31 @@
 import React, { useState } from 'react';
 import FooterComponent from '../header_footer/FooterComponent';
 import { useHistory } from "react-router-dom";
+import RaceDataService from '../../service/RaceDataService'
 
-export default function LoginForm() {
-
-    const adminUser = {
-        username: "admin",
-        password: "pass"
-    }
+export default function RegisterForm() {
 
     const [details, setDetails] = useState({username: "", email: "", password: ""})
     const [error, setError] = useState("")
 
 
     const history = useHistory();
-
     const HandleSubmit = e => {
         e.preventDefault()
 
-        if(details.username === adminUser.username && details.password === adminUser.password){
+        if(true){
             window.localStorage.setItem('user', JSON.stringify(details));
-            history.push('/');
+            RaceDataService.addUser(details)
+                        .then(history.push(`/`))
         }else{
             setError("Details do not match")
         }
     }
 
-    const Register = () => {
-            history.push('/register');
-    }
-
     return(
         <form className="loginForm" onSubmit={HandleSubmit}>
             <div className="form-inner">
-                <h2>Login</h2>
+                <h2>Register</h2>
                 {(error !== "") ? ( <div className="error">{error}</div>) : ""}
                 <div className="form-group">
                     <label htmlFor="username">Username:</label>
@@ -51,8 +43,7 @@ export default function LoginForm() {
                         onChange={e => setDetails({...details, password: e.target.value})} value={details.password}/>
                 </div>
                 <br/>
-                 <input type="submit" value="login"/>
-                 <button onClick={Register} style={{position:"absolute", right:"30px"}}>Register</button>
+                 <input type="submit" value="register"/>
              </div>
         </form>
     )

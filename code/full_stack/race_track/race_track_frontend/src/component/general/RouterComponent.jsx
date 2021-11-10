@@ -6,6 +6,7 @@ import RaceRegistryComponent from '../race/RaceRegistryComponent'
 import UpdateRaceComponent from '../race/UpdateRaceComponent'
 import AddRaceComponent from '../race/AddRaceComponent'
 import LoginForm from '../general/LoginForm'
+import RegisterForm from '../general/RegisterForm'
 
 function RouterComponent(){
    return(
@@ -14,6 +15,7 @@ function RouterComponent(){
             <Switch>
                 <Route exact path="/"><WelcomeComponent /></Route>
                 <Route path="/login"><LoginForm /></Route>
+                <Route path="/register"><RegisterForm /></Route>
                 <Route path="/addRace/:id" component={AddRaceComponent} />
                 <Route path="/updateRace/:id" component={UpdateRaceComponent} />
                 <Route path="/raceRegistry" component={RaceRegistryComponent} />

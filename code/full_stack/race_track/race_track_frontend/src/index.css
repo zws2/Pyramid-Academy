@@ -98,6 +98,7 @@ form .form-inner .form-group input:focus {
 }
 
 form .form-inner input[type="submit"],
+ .form-inner button,
  .navbar button{
     display: inline-block;
     padding: 10px 15px;
@@ -112,6 +113,7 @@ form .form-inner input[type="submit"],
 }
 
 form .form-inner input[type="submit"]:hover,
+ .form-inner button:hover,
  .navbar button:hover{
     background-position: 100% 0%;
 }
