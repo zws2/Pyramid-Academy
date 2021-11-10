@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import RaceDataService from '../../service/RaceDataService';
-import FooterComponent from '../header_footer/FooterComponent';
 
 class RaceRegistryComponent extends Component {
     constructor(props) {
@@ -49,46 +48,47 @@ class RaceRegistryComponent extends Component {
 
    render() {
         return(
-           <div className="container">
-               <h1 style={{textAlign:"center"}}>Race Registry</h1><br/>
-               <div className="jumbotron sticky-top"  style={{textAlign: "center",  color: "white"}}>
-               
-                   <table className="table table-striped">
-                       <thead>
-                           <tr class="table-dark" style={{textAlign: "center"}}>
-                               <th>Id</th>
-                               <th>Title</th>
-                               <th>Caption</th>
-                               <th>Contributor</th>
-                               <th></th>
-                               <th>
-                                    <div >
-                                        <br/>
-                                        <button className="btn btn-primary" onClick={this.addRaceClicked}>Add Race</button>
-                                    </div>
-                               </th>
-                           </tr>
-                       </thead>
-                       <tbody>
-                           {
-                               this.state.races.map (
-                                   race =>
-                                   <tr style={{textAlign: "center"}} key={race.id}>
-                                       <td>{race.id}</td>
-                                       <td>{race.time}</td>
-                                       <td>{race.horses}</td>
-                                       <td>{race.results}</td>
-                                       <td><button className="btn btn-warning" onClick={() => this.deleteRaceClicked(race.id, race.time, race.horses)}>Delete</button></td>
-                                       <td><button className="btn btn-success" onClick={() => this.upDateRaceClicked(race)}>Update</button></td>
-                                   </tr>
-                               )
-                           }
-                       </tbody>
-                        <br/>
-                   </table>
+            <div>
+                <div className="container">
+                    <h1 style={{textAlign:"center"}}>Race Registry</h1><br/>
+                    <div className="jumbotron sticky-top"  style={{textAlign: "center",  color: "white"}}>
+
+                       <table className="table table-striped">
+                           <thead>
+                               <tr class="table-dark" style={{textAlign: "center"}}>
+                                   <th>Id</th>
+                                   <th>Title</th>
+                                   <th>Caption</th>
+                                   <th>Contributor</th>
+                                   <th></th>
+                                   <th>
+                                        <div >
+                                            <br/>
+                                            <button className="btn btn-primary" onClick={this.addRaceClicked}>Add Race</button>
+                                        </div>
+                                   </th>
+                               </tr>
+                           </thead>
+                           <tbody>
+                               {
+                                   this.state.races.map (
+                                       race =>
+                                       <tr style={{textAlign: "center"}} key={race.id}>
+                                           <td>{race.id}</td>
+                                           <td>{race.time}</td>
+                                           <td>{race.horses}</td>
+                                           <td>{race.results}</td>
+                                           <td><button className="btn btn-warning" onClick={() => this.deleteRaceClicked(race.id, race.time, race.horses)}>Delete</button></td>
+                                           <td><button className="btn btn-success" onClick={() => this.upDateRaceClicked(race)}>Update</button></td>
+                                       </tr>
+                                   )
+                               }
+                           </tbody>
+                            <br/>
+                       </table>
+                   </div>
                </div>
-                <FooterComponent />
-           </div>
+            </div>
         )
    } 
 }

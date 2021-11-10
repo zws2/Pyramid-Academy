@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
 import RaceDataService from '../../service/RaceDataService'
-import FooterComponent from '../header_footer/FooterComponent';
 
 class AddRaceComponent extends Component {
     constructor(props) {
@@ -66,7 +65,6 @@ class AddRaceComponent extends Component {
                              <input className="btn btn-success" type="submit" value="Submit" name="submit"/>
                     </form><br/><br/>
                 </div>
-                <FooterComponent />
             </div>
         )
     }

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import {Link} from 'react-router-dom'
-import LoginForm from '../general/LoginForm'
 import { useHistory } from "react-router-dom";
 
 export default function HeaderComponent(){
 
     const [user, setUser] = useState({username: "", email: "", password: ""})
+    const history = useHistory();
 
     useEffect(() => {
         const stored_user = JSON.parse(window.localStorage.getItem('user'));
@@ -18,10 +18,12 @@ export default function HeaderComponent(){
     const Logout = () => {
         setUser({username: "", email: "", password: ""})
         window.localStorage.setItem('user', JSON.stringify({username: "", email: "", password: ""}));
+        history.push({
+            pathname: '/',
+            state: {isLoggedIn:"false"}
+        })
         window.location.reload(false);
     }
-
-    const history = useHistory();
 
     const Login = () => {
         history.push('/login');
@@ -32,11 +34,12 @@ export default function HeaderComponent(){
             <nav className="navbar navbar-expand-md navbar-dark bg-dark">
                 <ul className="navbar-nav">
                     <h3><Link className="nav-link" to="/">Home</Link></h3>
-                    <h3><Link className="nav-link" to="/raceRegistry">View Races</Link></h3>
+                    <h3><Link className="nav-link" to="/raceRegistry">Races</Link></h3>
+                    <h3><Link className="nav-link" to="/profile">Profile</Link></h3>
                     {(user.username !== "") ? (
-                        <button onClick={Logout}>Logout</button>
+                        <button onClick={Logout} style={{position:"absolute", right:"30px"}}>Logout</button>
                         ) : (
-                        <button onClick={Login}>Login</button>
+                        <button onClick={Login} style={{position:"absolute", right:"30px"}}>Login</button>
                     )}
                 </ul>
             </nav>

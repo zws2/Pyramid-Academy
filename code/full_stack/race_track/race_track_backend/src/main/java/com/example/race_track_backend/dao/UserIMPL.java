@@ -37,9 +37,9 @@ public class UserIMPL implements UserDAO {
 
     @Override
     @Transactional //Defines the scope of a single database transaction.
-    public User findById(int theId) {
+    public User findById(String username) {
         Session currentSession = entityManager.unwrap(Session.class);
-        return currentSession.get(User.class, theId);
+        return currentSession.get(User.class, username);
     }
 
     @Override
@@ -51,9 +51,9 @@ public class UserIMPL implements UserDAO {
 
     @Override
     @Transactional //Defines the scope of a single database transaction.
-    public void deleteById(int theId) {
+    public void deleteById(String username) {
         Session currentSession = entityManager.unwrap(Session.class);
-        User myUser = currentSession.get(User.class, theId);
+        User myUser = currentSession.get(User.class, username);
         currentSession.delete(myUser);
     }
 }

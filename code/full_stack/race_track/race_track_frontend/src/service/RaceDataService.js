@@ -26,8 +26,8 @@ class RaceDataService {
             return axios.get(`http://localhost:8080/retrieveAllUsers`);
     }
 
-    retrieveUser(id) {
-        return axios.get(`http://localhost:8080/retrieveUser/${id}`);
+    retrieveUser(username) {
+        return axios.get(`http://localhost:8080/retrieveUser/${username}`);
     }
 
     deleteUser(id) {
@@ -42,5 +42,4 @@ class RaceDataService {
         return axios.post(`http://localhost:8080/addUser/`, user)
     }
 }
-
 export default new RaceDataService()

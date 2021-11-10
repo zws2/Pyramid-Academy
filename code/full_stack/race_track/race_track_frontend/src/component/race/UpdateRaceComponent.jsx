@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import RaceDataService from '../../service/RaceDataService'
-import FooterComponent from '../header_footer/FooterComponent';
 
 class UpdateRaceComponent extends Component {
     constructor(props) {
@@ -104,7 +103,6 @@ class UpdateRaceComponent extends Component {
                     </form>
                 <br/><br/>
                 </div>
-                <FooterComponent />
             </div>
         )
     }

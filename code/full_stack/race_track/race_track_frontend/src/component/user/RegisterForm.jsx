@@ -1,24 +1,37 @@
 import React, { useState } from 'react';
-import FooterComponent from '../header_footer/FooterComponent';
-import { useHistory } from "react-router-dom";
+import { useHistory} from "react-router-dom";
 import RaceDataService from '../../service/RaceDataService'
 
 export default function RegisterForm() {
 
-    const [details, setDetails] = useState({username: "", email: "", password: ""})
+    const [details, setDetails] = useState({username: "", email: "", password: "", credits: 0})
     const [error, setError] = useState("")
-
-
     const history = useHistory();
+
     const HandleSubmit = e => {
         e.preventDefault()
 
-        if(true){
-            window.localStorage.setItem('user', JSON.stringify(details));
-            RaceDataService.addUser(details)
-                        .then(history.push(`/`))
+        if(details.username === ""){
+            setError("Must enter a username.")
+        }else if (details.email === ""){
+            setError("Must enter an email.")
+        }else if (details.password === ""){
+            setError("Must enter a password.")
         }else{
-            setError("Details do not match")
+            RaceDataService
+                .retrieveUser(details.username)
+                    .then( response => {
+                        if(response.data === ""){
+                            window.localStorage.setItem('user', JSON.stringify(details))
+                            RaceDataService.addUser(details)
+                                        .then(response => {
+                                                if(response.status < 300){
+                                                    history.push('/')}
+                                                })
+                        }else{
+                            setError("That user already exists.")
+                        }
+                    })
         }
     }
 

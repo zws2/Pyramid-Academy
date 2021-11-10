@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import FooterComponent from '../header_footer/FooterComponent';
-import { useHistory } from "react-router-dom";
+import { useHistory} from "react-router-dom";
+import RaceDataService from '../../service/RaceDataService'
 
 export default function LoginForm() {
 
@@ -11,8 +11,6 @@ export default function LoginForm() {
 
     const [details, setDetails] = useState({username: "", email: "", password: ""})
     const [error, setError] = useState("")
-
-
     const history = useHistory();
 
     const HandleSubmit = e => {
@@ -20,9 +18,19 @@ export default function LoginForm() {
 
         if(details.username === adminUser.username && details.password === adminUser.password){
             window.localStorage.setItem('user', JSON.stringify(details));
-            history.push('/');
+            history.push('/admin');
         }else{
-            setError("Details do not match")
+            RaceDataService
+                .retrieveUser(details.username)
+                    .then( response => {
+                        if(response.data.password === details.password){
+                            window.localStorage.setItem('user', JSON.stringify(details))
+                            RaceDataService.addUser(details)
+                                        .then(history.push('/'))
+                        }else{
+                            setError("Incorrect details.")
+                        }
+                    })
         }
     }
 
@@ -41,18 +49,13 @@ export default function LoginForm() {
                         onChange={e => setDetails({...details, username: e.target.value})} value={details.username}/>
                 </div>
                 <div className="form-group">
-                    <label htmlFor="email">Email:</label>
-                    <input type="text" name="email" id="email"
-                        onChange={e => setDetails({...details, email: e.target.value})} value={details.email}/>
-                </div>
-                <div className="form-group">
                     <label htmlFor="password">Password:</label>
                     <input type="text" name="password" id="password"
                         onChange={e => setDetails({...details, password: e.target.value})} value={details.password}/>
                 </div>
                 <br/>
-                 <input type="submit" value="login"/>
-                 <button onClick={Register} style={{position:"absolute", right:"30px"}}>Register</button>
+                 <input type="submit" value="login" style={{position:"absolute", right:"30px"}}/>
+                 <button onClick={Register}>Register</button>
              </div>
         </form>
     )
