@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import RaceDataService, {submitRace} from '../../service/RaceDataService'
+import RaceDataService from '../../service/RaceDataService'
 import FooterComponent from '../header_footer/FooterComponent';
 
 class AddRaceComponent extends Component {
@@ -23,39 +23,18 @@ class AddRaceComponent extends Component {
         })
     }
 
-    handleFile(event){
-        const preview = document.querySelector('img')
-        const file = document.querySelector('input[type=file]').files[0]
-        const reader = new FileReader()
-
-        reader.addEventListener("load", function () {
-            preview.src = reader.result
-        }, false)
-
-        if (file) {
-            reader.readAsDataURL(file)
-        }
-    }
-
     handleSubmit() {
         console.log("submit")
-        const preview = document.querySelector('img')
-        let image_source = preview.src.substring(
-        preview.src.indexOf(",") + 1,
-        preview.src.length)
 
         let race = {
             id: this.state.id,
             title: this.state.title,
             caption: this.state.caption,
-            contributor: this.state.contributor,
-            img: image_source
+            contributor: this.state.contributor
         }
 
         RaceDataService.addRace(race)
             .then(this.props.history.push(`/raceRegistry`))
-
-//         submitRace(race).then(this.props.history.push(`/raceRegistry`))
     }
 
     render() {

@@ -14,9 +14,6 @@ public class Race {
     @Column(name = "id") //This is mapping the primary key to the id column in the table.
     private int id;
 
-    @Column(name = "title")
-    private String title;
-
     @Column(name = "time")
     private String time;
 
@@ -30,19 +27,17 @@ public class Race {
     public Race() {
     }
 
-    public Race(int id, String title, String time, String horses, String results) {
+    public Race(int id, String time, String horses, String results) {
         this.id = id;
-        this.title = title;
         this.time = time;
-        this.horses = horses;//json.parse
-        this.results = results;//json.parse
+        this.horses = horses;
+        this.results = results;
     }
 
     @Override
     public String toString() {
         return "Race{" +
                 "id=" + id +
-                ", title='" + title + '\'' +
                 ", time='" + time + '\'' +
                 ", horses='" + horses + '\'' +
                 ", results='" + results + '\'' +
@@ -55,14 +50,6 @@ public class Race {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getTime() {

@@ -1,20 +1,4 @@
 import axios from 'axios'
-import { useRouter } from 'next/router'
-
-const RefreshData = () => {
-    const router = useRouter();
-    router.replace(router.asPath);
-}
-
-export async function submitRace(race) {
-  const res = await axios.post(`http://localhost:8080/addRace/`, race)
-
-  if (res.status < 300) {
-    RefreshData();
-  }
-
-  return res
-}
 
 class RaceDataService {
 
@@ -35,8 +19,27 @@ class RaceDataService {
     }
 
     addRace(race) {
-
         return axios.post(`http://localhost:8080/addRace/`, race)
+    }
+    
+    retrieveAllUsers() {
+            return axios.get(`http://localhost:8080/retrieveAllUsers`);
+    }
+
+    retrieveUser(id) {
+        return axios.get(`http://localhost:8080/retrieveUser/${id}`);
+    }
+
+    deleteUser(id) {
+        return axios.delete(`http://localhost:8080/deleteUser/${id}`)
+    }
+
+    updateUser(user) {
+        return axios.put(`http://localhost:8080/updateUser/`, user)
+    }
+    
+    addUser(user){
+        return axios.post(`http://localhost:8080/addUser/`, user)
     }
 }
 

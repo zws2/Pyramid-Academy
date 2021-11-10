@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/random_pet_frontend.iml" filepath="$PROJECT_DIR$/.idea/random_pet_frontend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/race_track_frontend.iml" filepath="$PROJECT_DIR$/.idea/race_track_frontend.iml" />
     </modules>
   </component>
 </project>
