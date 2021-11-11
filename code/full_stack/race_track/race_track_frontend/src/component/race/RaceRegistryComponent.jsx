@@ -1,96 +1,83 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useHistory } from "react-router-dom";
 import RaceDataService from '../../service/RaceDataService';
 
-class RaceRegistryComponent extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            races: []
-        }
-        this.refreshRaceRegistry = this.refreshRaceRegistry.bind(this)
-        this.deleteRaceClicked = this.deleteRaceClicked.bind(this)
-        this.upDateRaceClicked = this.upDateRaceClicked.bind(this)
-        this.addRaceClicked = this.addRaceClicked.bind(this)
-    }
+export default function RaceRegistryComponent() {
 
-    componentDidMount() {
-        this.refreshRaceRegistry()
-    }
+    const [races, setRaces] = useState([])
+    const [message, setMessage] = useState("")
+    const history = useHistory();
 
-    refreshRaceRegistry() {
-        setTimeout(() => {
+    useEffect(() => {
+            refreshRaceRegistry()
+        }, []);
+
+    const refreshRaceRegistry = () => {
             RaceDataService.retrieveAllRaces()
                 .then(
                     response => {
-                            this.setState({
-                            races: response.data})})
-        }, 500)
+                            setRaces(response.data)})
     }
 
-    deleteRaceClicked(id, title, caption) {
+    const deleteRaceClicked = (id) => {
         RaceDataService.deleteRace(id)
         .then(
             response => {
-                this.setState({message: `Deleted Race: ${title}`})
-                alert(this.state.message)
-                this.refreshRaceRegistry()
+                setMessage(`Deleted Race: ${id}`)
+                alert(message)
+                refreshRaceRegistry()
             }
         )
     }
     
-    upDateRaceClicked(race) {
-        this.props.history.push(`/updateRace/${race.id}`)
+    const updateRaceClicked = (race) => {
+        history.push(`/updateRace/${race.id}`)
     }
 
-    addRaceClicked() {
-        this.props.history.push(`/addRace/-1`)
+    const addRaceClicked = () => {
+        history.push(`/addRace/-1`)
     }
 
-   render() {
-        return(
-            <div>
-                <div className="container">
-                    <h1 style={{textAlign:"center"}}>Race Registry</h1><br/>
-                    <div className="jumbotron sticky-top"  style={{textAlign: "center",  color: "white"}}>
-
-                       <table className="table table-striped">
-                           <thead>
-                               <tr class="table-dark" style={{textAlign: "center"}}>
-                                   <th>Id</th>
-                                   <th>Title</th>
-                                   <th>Caption</th>
-                                   <th>Contributor</th>
-                                   <th></th>
-                                   <th>
-                                        <div >
-                                            <br/>
-                                            <button className="btn btn-primary" onClick={this.addRaceClicked}>Add Race</button>
-                                        </div>
-                                   </th>
-                               </tr>
-                           </thead>
-                           <tbody>
-                               {
-                                   this.state.races.map (
-                                       race =>
-                                       <tr style={{textAlign: "center"}} key={race.id}>
-                                           <td>{race.id}</td>
-                                           <td>{race.time}</td>
-                                           <td>{race.horses}</td>
-                                           <td>{race.results}</td>
-                                           <td><button className="btn btn-warning" onClick={() => this.deleteRaceClicked(race.id, race.time, race.horses)}>Delete</button></td>
-                                           <td><button className="btn btn-success" onClick={() => this.upDateRaceClicked(race)}>Update</button></td>
-                                       </tr>
-                                   )
-                               }
-                           </tbody>
-                            <br/>
-                       </table>
-                   </div>
+    return(
+        <div>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <h1 style={{textAlign:"center"}}>Race Registry</h1>
+            <div className="container">
+                   <table className="table table-striped">
+                       <thead>
+                           <tr className="table-dark" style={{textAlign: "center"}}>
+                               <th>Id</th>
+                               <th>Time</th>
+                               <th>Horses</th>
+                               <th>Results</th>
+                               <th></th>
+                               <th>
+                                    <div>
+                                        <button className="btn btn-primary" onClick={addRaceClicked}>Add Race</button>
+                                    </div>
+                               </th>
+                           </tr>
+                       </thead>
+                       <tbody>
+                           {
+                               races.map (
+                                   race =>
+                                   <tr style={{textAlign: "center"}} key={race.id}>
+                                       <td>{race.id}</td>
+                                       <td>{race.time}</td>
+                                       <td>{race.horses}</td>
+                                       <td>{race.results}</td>
+                                       <td><button className="btn btn-warning" onClick={() => deleteRaceClicked(race.id, race.time, race.results)}>Delete</button></td>
+                                       <td><button className="btn btn-success" onClick={() => updateRaceClicked(race)}>Update</button></td>
+                                   </tr>
+                               )
+                           }
+                       </tbody>
+                   </table>
                </div>
-            </div>
-        )
-   } 
+           </div>
+    )
 }
-
-export default RaceRegistryComponent;

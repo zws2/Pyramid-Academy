@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory} from "react-router-dom";
 import RaceDataService from '../../service/RaceDataService'
 
 export default function ProfileComponent() {
@@ -7,7 +6,6 @@ export default function ProfileComponent() {
     const [error, setError] = useState("")
     const [details, setDetails] = useState({username: "", email: "", password: "", credits: 0})
     const [amount, setAmount] = useState(0)
-    const history = useHistory();
 
     useEffect(() => {
         const stored_user = JSON.parse(window.localStorage.getItem('user'));
@@ -35,8 +33,6 @@ export default function ProfileComponent() {
                 setError("You dont have enouogh credits.")
                 return
             }
-        }else if(submitter === "set"){
-            value = amount
         }else if(submitter === "deposit"){
             value = parseInt(details.credits) + parseInt(amount)
         }else{
@@ -63,7 +59,6 @@ export default function ProfileComponent() {
                 </div>
                 <br/>
                  <input type="submit" value="deposit" name="deposit" style={{position:"absolute", right:"30px"}}/>
-                 <input type="submit" value="set" name ="set" style={{position:"absolute", right:"148px"}}/>
                  <input type="submit" value="withdraw" name="withdraw"/>
              </div>
         </form>

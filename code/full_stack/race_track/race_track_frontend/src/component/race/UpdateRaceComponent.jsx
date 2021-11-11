@@ -1,111 +1,73 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useHistory } from "react-router-dom";
 import RaceDataService from '../../service/RaceDataService'
 
-class UpdateRaceComponent extends Component {
-    constructor(props) {
-        super(props)
+export default function UpdateRaceComponent() {
 
-        this.state = {
-            id: this.props.match.params.id,
-            title: '',
-            caption: '',
-            contributor: '',
-            img: ''
-        }
+    const [race, setRace] = useState({id: 0, time: "", horses: "", results: ""})
+    const history = useHistory();
 
-        this.handleSubmit = this.handleSubmit.bind(this)
-        this.handleChange = this.handleChange.bind(this)
-        this.handleFile = this.handleFile.bind(this)
-    }
-
-    componentDidMount(){
-        RaceDataService.retrieveRace(this.props.match.params.id)
+    useEffect(() => {
+        const id = window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
+        RaceDataService.retrieveRace(id)
             .then(
                 response => {
-                    this.setState({
+                    setRace({
                         id: response.data.id,
-                        title: response.data.title,
-                        caption: response.data.caption,
-                        contributor: response.data.contributor,
-                        img: response.data.img
+                        time: response.data.time,
+                        horses: response.data.horses,
+                        results: response.data.results
                     })
                 }
             )
-    }
+    }, []);
 
-    handleChange(event) {
-            this.setState({
-                [event.target.name]: event.target.value
-            })
-    }
-
-    handleFile(event){
-        const preview = document.querySelector('img')
-        const file = document.querySelector('input[type=file]').files[0]
-        const reader = new FileReader()
-
-        reader.addEventListener("load", function () {
-            preview.src = reader.result
-        }, false)
-
-        if (file) {
-            reader.readAsDataURL(file)
-        }
-    }
-
-    handleSubmit() {
-        const preview = document.querySelector('img')
-        let image_source = preview.src.substring(
-        preview.src.indexOf(",") + 1,
-        preview.src.length)
-
-        let race = {
-            id: this.state.id,
-            title: this.state.title,
-            caption: this.state.caption,
-            contributor: this.state.contributor,
-            img: image_source
-        }
+    const handleSubmit = e => {
+        e.preventDefault()
         RaceDataService.updateRace(race)
-            .then(this.props.history.push(`/raceRegistry`))
+            .then(history.push(`/raceRegistry`))
     }
 
-
-    render() {
-
-        console.log("render")
-
-        return(
-            <div>
-                <div className="jumbotron" style={{height:"50px", backgroundColor: "gray"}}>
-                    <h3 style={{textAlign: "center"}}>Update Race</h3>
+    return(
+        <form className="loginForm" onSubmit={handleSubmit}>
+            <div className="form-inner">
+                <h2>Update Race</h2>
+                <div>
+                    <label>Race ID: {race.id}</label>
                 </div>
-                <div className="container">
-                    <form onSubmit={this.handleSubmit}>
-                        <div>
-                            <label>Title</label>
-                            <input className="form-control" type="text" name="title" value={this.state.title} onChange={this.handleChange}/>
-                        </div>
-                        <div>
-                            <label>Caption</label>
-                            <input className="form-control" type="text" name="caption" value={this.state.caption} onChange={this.handleChange}/>
-                        </div>
-                        <div>
-                            <label>Contributor</label>
-                            <input className="form-control" type="text" name="contributor" value={this.state.contributor} onChange={this.handleChange}/>
-                        </div>
-                        <div>
-                            <br/>
-                            <input type="file" name="img" onChange={this.handleFile}/>
-                            <img src={"data:image/png;base64," + this.state.img} height="200" alt="preview..."></img>
-                        </div><br/>
-                        <input className="btn btn-success" type="submit" value="Submit" name="submit"/>
-                    </form>
-                <br/><br/>
+                <br/>
+                <div>
+                    <label>Time:</label>
+                    <input
+                        className="form-control"
+                        type="text"
+                        name="time"
+                        onChange={e => setRace({...race, time: e.target.value})}
+                        value={race.time}
+                    />
                 </div>
+                <div>
+                    <label>Horses:</label>
+                    <input
+                        className="form-control"
+                        type="text"
+                        name="horses"
+                        onChange={e => setRace({...race, horses: e.target.value})}
+                        value={race.horses}
+                    />
+                </div>
+                <div>
+                    <label>Results:</label>
+                    <input
+                        className="form-control"
+                        type="text"
+                        name="results"
+                        onChange={e => setRace({...race, results: e.target.value})}
+                        value={race.results}
+                    />
+                </div>
+                <input className="btn btn-success" type="submit" value="Submit" name="submit"/>
             </div>
-        )
-    }
+        </form>
+    )
 }
-
-export default UpdateRaceComponent

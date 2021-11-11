@@ -1,73 +1,98 @@
-import React, {Component} from 'react'
+import React, { useState }  from 'react'
+import { useHistory } from "react-router-dom";
 import RaceDataService from '../../service/RaceDataService'
 
-class AddRaceComponent extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            id: this.props.match.params.id,
-            title: '',
-            caption: '',
-            contributor: '',
-            img: '',
-        }
-        this.handleSubmit = this.handleSubmit.bind(this)
-        this.handleChange = this.handleChange.bind(this)
-        this.handleFile = this.handleFile.bind(this)
-    }
+export default function AddRaceComponent() {
 
-    handleChange(event) {
-        this.setState({
-            [event.target.name]: event.target.value
-        })
-    }
+    const [race, setRace] = useState({id: -1, time: "", horses: "", results: ""})
+    const history = useHistory();
+    const [horses, setHorses] =
+        useState([
+            "Biscuit",
+            "Gravy",
+            "Raisin",
+            "Pepper",
+            "Bean",
+            "Peanut",
+            "Muffin",
+            "Meatball"
+        ])
 
-    handleSubmit() {
-        console.log("submit")
-
-        let race = {
-            id: this.state.id,
-            title: this.state.title,
-            caption: this.state.caption,
-            contributor: this.state.contributor
-        }
-
+    const handleSubmit = e => {
+        e.preventDefault()
         RaceDataService.addRace(race)
-            .then(this.props.history.push(`/raceRegistry`))
+            .then(response => {
+                if(response.status < 300){
+                    history.push('/raceRegistry')
+                }
+            })
     }
 
-    render() {
-        return(
-            <div>
-                <div className="jumbotron" style={{height: "50px", backgroundColor: "gray"}}>
-                <h3 style={{textAlign: "center"}}>Add Race</h3>
+    const handleSelect = e => {
+        let str = ""
+        if(race.horses === ""){
+            str = e.target.value
+        }else{
+            str = race.horses + ", " + e.target.value
+        }
+
+        setRace({...race, horses: str})
+
+        horses.splice(horses.indexOf(e.target.value), 1)
+
+        console.log(horses)
+        console.log(race.horses)
+
+    }
+
+    const listToOptions = (list) => {
+        let components = []
+
+        list.forEach(e =>{
+            let str = <option value={e}>{e}</option>
+            components.push(str)
+        } )
+        return components
+    }
+
+    return(
+        <form className="loginForm" onSubmit={handleSubmit}>
+            <div className="form-inner">
+                <h2>Add Race</h2>
+                <div>
+                    <label>Time:</label>
+                    <input
+                        className="form-control"
+                        type="text"
+                        name="time"
+                        onChange={e => setRace({...race, time: e.target.value})}
+                        value={race.time}
+                    />
                 </div>
-                <div className="container">
-                    <form onSubmit={this.handleSubmit}>
-                        <div>
-                            <label>Title:</label>
-                            <input className="form-control" type="text" name="title" onChange={this.handleChange}/>
-                        </div>
-                        <div>
-                            <label>Caption:</label>
-                            <input className="form-control" type="text" name="caption" onChange={this.handleChange}/>
-                        </div>
-                        <div>
-                            <label>Contributor:</label>
-                            <input className="form-control" type="text" name="contributor" onChange={this.handleChange}/>
-                        </div>
-                        <div>
-                        <br />
-                             <input type="file" name="img" onChange={this.handleFile}/>
-                             <img src="" height="200" alt="preview..."></img>
-                        </div>
-                        <br />
-                             <input className="btn btn-success" type="submit" value="Submit" name="submit"/>
-                    </form><br/><br/>
+                <div>
+                    <label>Horses:</label>
+                    <select onChange={handleSelect}>
+                        {listToOptions(horses)}
+                    </select>
+                    <input
+                        className="form-control"
+                        type="text" name="horses"
+                        onChange={e => setRace({...race, horses: e.target.value})}
+                        value={race.horses}
+                    />
+                </div>
+                <div>
+                    <label>Results:</label>
+                    <input className="form-control"
+                        type="text" name="results"
+                        onChange={e => setRace({...race, results: e.target.value})}
+                        value={race.results}
+                    />
+                </div>
+                <div>
+                     <input className="btn btn-success" type="submit" value="Submit" name="submit"/>
                 </div>
             </div>
-        )
-    }
+        </form>
+    )
 }
-
-export default AddRaceComponent

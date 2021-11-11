@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 class FooterComponent extends Component {
     render() {
         const isRegistry = window.location.href.includes("raceRegistry")
-        if(isRegistry){
+        if(false){
             return(
                 <footer className="registryFooter">
                      <span className="text-muted">Zachary Snyder</span>
