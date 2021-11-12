@@ -43,7 +43,18 @@
 
 }
 
-.thing {
-    height: 300px;
-    overflow-y: scroll;
+.left-horse-container {
+    position: absolute;
+    width: 400px;
+    margin-right: 75%;
+    transform: translate(25%, 0)
+
+}
+
+.right-horse-container {
+    position: absolute;
+    width: 400px;
+    margin-left: 75%;
+    transform: translate(-25%, 0)
+
 }

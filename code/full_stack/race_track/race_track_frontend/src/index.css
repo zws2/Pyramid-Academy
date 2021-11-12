@@ -97,8 +97,7 @@ form .form-inner .form-group input:focus {
     box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.2)
 }
 
-form .form-inner input[type="submit"],
- .form-inner button,
+form .form-inner .btn,
  .navbar button{
     display: inline-block;
     padding: 10px 15px;
@@ -112,8 +111,7 @@ form .form-inner input[type="submit"],
     cursor: pointer;
 }
 
-form .form-inner input[type="submit"]:hover,
- .form-inner button:hover,
+form .form-inner .btn:hover,
  .navbar button:hover{
     background-position: 100% 0%;
 }

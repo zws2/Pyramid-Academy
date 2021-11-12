@@ -40,11 +40,8 @@ export default function RaceRegistryComponent() {
 
     return(
         <div>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <h1 style={{textAlign:"center"}}>Race Registry</h1>
+            <br/><br/><br/><br/>
+            <h1 style={{textAlign:"center"}}>Race Registry</h1>
             <div className="container">
                    <table className="table table-striped">
                        <thead>

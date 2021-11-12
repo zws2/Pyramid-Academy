@@ -58,8 +58,8 @@ export default function ProfileComponent() {
                                             onChange={e => setAmount(e.target.value)} value={amount}/>
                 </div>
                 <br/>
-                 <input type="submit" value="deposit" name="deposit" style={{position:"absolute", right:"30px"}}/>
-                 <input type="submit" value="withdraw" name="withdraw"/>
+                 <input className="btn" type="submit" value="deposit" name="deposit" style={{position:"absolute", right:"30px"}}/>
+                 <input className="btn" type="submit" value="withdraw" name="withdraw"/>
              </div>
         </form>
     )

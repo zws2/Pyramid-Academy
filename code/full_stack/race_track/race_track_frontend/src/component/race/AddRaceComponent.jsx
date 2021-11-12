@@ -1,98 +1,142 @@
 import React, { useState }  from 'react'
 import { useHistory } from "react-router-dom";
-import RaceDataService from '../../service/RaceDataService'
+import RaceDataService from '../../service/RaceDataService';
+import DateTimePicker from 'react-datetime-picker';
 
 export default function AddRaceComponent() {
 
     const [race, setRace] = useState({id: -1, time: "", horses: "", results: ""})
+    const [error, setError] = useState("")
     const history = useHistory();
     const [horses, setHorses] =
-        useState([
-            "Biscuit",
-            "Gravy",
-            "Raisin",
-            "Pepper",
-            "Bean",
-            "Peanut",
-            "Muffin",
-            "Meatball"
-        ])
+        useState({
+            available: [
+                {name: "Biscuit", id: 1 },
+                {name: "Gravy", id: 2 },
+                {name: "Raisin", id: 3 },
+                {name: "Pepper", id: 4 },
+                {name: "Bean", id: 5 },
+                {name: "Peanut", id: 6 },
+                {name: "Muffin", id: 7 },
+                {name: "Meatball", id: 8 }
+            ],
+            added: []
+        })
 
-    const handleSubmit = e => {
-        e.preventDefault()
-        RaceDataService.addRace(race)
-            .then(response => {
-                if(response.status < 300){
-                    history.push('/raceRegistry')
-                }
-            })
-    }
+    const handleAddHorse = (horse) => {
+        let temp_available = horses.available
+        let temp_added = horses.added
 
-    const handleSelect = e => {
-        let str = ""
-        if(race.horses === ""){
-            str = e.target.value
-        }else{
-            str = race.horses + ", " + e.target.value
+        if(horses.available.includes(horse)){
+            temp_available.splice(horses.available.indexOf(horse), 1)
+            temp_added.push(horse)
         }
 
-        setRace({...race, horses: str})
-
-        horses.splice(horses.indexOf(e.target.value), 1)
-
-        console.log(horses)
-        console.log(race.horses)
-
+        setHorses({...horses, available:temp_available, added: temp_added})
     }
 
-    const listToOptions = (list) => {
-        let components = []
+    const handleRemoveHorse = (horse) => {
+        let temp_available = horses.available
+        let temp_added = horses.added
 
-        list.forEach(e =>{
-            let str = <option value={e}>{e}</option>
-            components.push(str)
-        } )
-        return components
+        if(horses.added.includes(horse)){
+            temp_added.splice(horses.added.indexOf(horse), 1)
+            temp_available.push(horse)
+        }
+
+        setHorses({...horses, available:temp_available, added:temp_added})
+    }
+
+    const handleSubmit = e => {
+            e.preventDefault()
+
+            if(horses.added.length !== 6){
+                setError("please select 6 horses")
+            }else{
+
+                let str = horses.added[0].name
+                for(let i=1; i<horses.added.length; i++){
+                    str += ", " + horses.added[i].name
+                }
+
+                let race_submission = race
+                race_submission.horses = str
+
+                RaceDataService.addRace(race_submission)
+                    .then(response => {
+                        if(response.status < 300){
+                            history.push('/raceRegistry')
+                        }
+                    })
+            }
+
     }
 
     return(
-        <form className="loginForm" onSubmit={handleSubmit}>
-            <div className="form-inner">
-                <h2>Add Race</h2>
-                <div>
-                    <label>Time:</label>
-                    <input
-                        className="form-control"
-                        type="text"
-                        name="time"
-                        onChange={e => setRace({...race, time: e.target.value})}
+        <div>
+            <form className="loginForm" onSubmit={handleSubmit}>
+                <div className="form-inner">
+                    <h2>Add Race</h2>
+                    {(error !== "") ? ( <div className="error">{error}</div>) : ""}
+                    <DateTimePicker
+                        onChange={(date) => setRace({...race, time:date})}
                         value={race.time}
                     />
+                    <br/>
+                    <div>
+                         <input className="btn btn-success" type="submit" value="Submit" name="submit"/>
+                    </div>
                 </div>
-                <div>
-                    <label>Horses:</label>
-                    <select onChange={handleSelect}>
-                        {listToOptions(horses)}
-                    </select>
-                    <input
-                        className="form-control"
-                        type="text" name="horses"
-                        onChange={e => setRace({...race, horses: e.target.value})}
-                        value={race.horses}
-                    />
-                </div>
-                <div>
-                    <label>Results:</label>
-                    <input className="form-control"
-                        type="text" name="results"
-                        onChange={e => setRace({...race, results: e.target.value})}
-                        value={race.results}
-                    />
-                </div>
-                <div>
-                     <input className="btn btn-success" type="submit" value="Submit" name="submit"/>
-                </div>
+            </form>
+            <br/><br/><br/><br/>
+            <div className="left-horse-container">
+                <table className="table table-striped">
+                    <thead>
+                        <tr className="table-dark" style={{textAlign: "center"}}>
+                            <th>Available Horses</th>
+                        </tr>
+                    </thead>
+                    <tbody style={{height:"10em", overflow:"scroll"}}>
+                        {horses.available.map (
+                            horse =>
+                            <tr style={{textAlign: "center"}} key={horse.id}>
+                                <td>{horse.name}</td>
+                                <td>
+                                    <button
+                                        type="button"
+                                        className="btn btn-success"
+                                        onClick={() => handleAddHorse(horse)}
+                                    >+</button>
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
             </div>
-        </form>
+            <div className="right-horse-container">
+                <table className="table table-striped">
+                    <thead>
+                        <tr className="table-dark" style={{textAlign: "center"}}>
+                            <th>Added Horses</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {horses.added.map (
+                            horse =>
+                            <tr style={{textAlign: "center"}} key={horse.id}>
+                                <td>{horse.name}</td>
+                                <td>
+                                    <button
+                                        type="button"
+                                        className="btn btn-warning"
+                                        onClick={() => handleRemoveHorse(horse)}
+                                    >-</button>
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     )
 }
