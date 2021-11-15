@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import RaceDataService from '../../service/RaceDataService'
 
-export default function ProfileComponent() {
+export default function BetComponent() {
 
     const [error, setError] = useState("")
     const [details, setDetails] = useState({username: "", email: "", password: "", credits: 0})

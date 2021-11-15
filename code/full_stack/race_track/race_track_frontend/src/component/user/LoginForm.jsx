@@ -16,9 +16,11 @@ export default function LoginForm() {
     const HandleSubmit = e => {
         e.preventDefault()
 
-        if(details.username === adminUser.username && details.password === adminUser.password){
-            window.localStorage.setItem('user', JSON.stringify(details));
-            history.push('/admin');
+        if(details.username === ""){
+            setError("Please enter a username.")
+        }else if(details.username === adminUser.username && details.password === adminUser.password){
+            window.localStorage.setItem('user', JSON.stringify(details))
+            history.push('/')
         }else{
             RaceDataService
                 .retrieveUser(details.username)
@@ -26,7 +28,7 @@ export default function LoginForm() {
                         if(response.data.password === details.password){
                             window.localStorage.setItem('user', JSON.stringify(details))
                             RaceDataService.addUser(details)
-                                        .then(history.push('/'))
+                                .then(history.push('/'))
                         }else{
                             setError("Incorrect details.")
                         }
@@ -34,12 +36,13 @@ export default function LoginForm() {
         }
     }
 
-    const Register = () => {
-            history.push('/register');
+    const Register = e => {
+        e.preventDefault()
+        history.push('/register');
     }
 
     return(
-        <form className="loginForm" onSubmit={HandleSubmit}>
+        <form className="smallForm" onSubmit={HandleSubmit}>
             <div className="form-inner">
                 <h2>Login</h2>
                 {(error !== "") ? ( <div className="error">{error}</div>) : ""}
@@ -54,8 +57,17 @@ export default function LoginForm() {
                         onChange={e => setDetails({...details, password: e.target.value})} value={details.password}/>
                 </div>
                 <br/>
-                 <input type="submit" value="login" style={{position:"absolute", right:"30px"}}/>
-                 <button onClick={Register}>Register</button>
+                <button
+                    className="btn btn-lg"
+                    type="submit"
+                    value="login"
+                    style={{position:"absolute", right:"30px"}}
+                >Login</button>
+                <button
+                    className="btn-primary btn-lg"
+                    value="register"
+                    onClick={Register}
+                >Register</button>
              </div>
         </form>
     )

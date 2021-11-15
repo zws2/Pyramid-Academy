@@ -18,25 +18,24 @@ export default function RegisterForm() {
         }else if (details.password === ""){
             setError("Must enter a password.")
         }else{
-            RaceDataService
-                .retrieveUser(details.username)
-                    .then( response => {
-                        if(response.data === ""){
-                            window.localStorage.setItem('user', JSON.stringify(details))
-                            RaceDataService.addUser(details)
-                                        .then(response => {
-                                                if(response.status < 300){
-                                                    history.push('/')}
-                                                })
-                        }else{
-                            setError("That user already exists.")
-                        }
-                    })
+            RaceDataService.retrieveUser(details.username)
+                .then( response => {
+                    if(response.data === ""){
+                        window.localStorage.setItem('user', JSON.stringify(details))
+                        RaceDataService.addUser(details)
+                            .then(response => {
+                                if(response.status < 300){
+                                    history.push('/')}
+                                })
+                    }else{
+                        setError("That user already exists.")
+                    }
+                })
         }
     }
 
     return(
-        <form className="loginForm" onSubmit={HandleSubmit}>
+        <form className="smallForm" onSubmit={HandleSubmit}>
             <div className="form-inner">
                 <h2>Register</h2>
                 {(error !== "") ? ( <div className="error">{error}</div>) : ""}
@@ -55,9 +54,14 @@ export default function RegisterForm() {
                     <input type="text" name="password" id="password"
                         onChange={e => setDetails({...details, password: e.target.value})} value={details.password}/>
                 </div>
-                <br/>
-                 <input type="submit" value="register"/>
-             </div>
+                <br/><br/>
+                 <button
+                     className="btn btn-lg"
+                     type="submit"
+                     value="register"
+                     style={{position:"absolute", right:"33%", bottom:"20px"}}
+                 >Register</button>
+            </div>
         </form>
     )
 }

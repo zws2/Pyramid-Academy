@@ -61,6 +61,7 @@ export default function AddRaceComponent() {
 
                 let race_submission = race
                 race_submission.horses = str
+                race_submission.time = race.time.toLocaleString("en-US")
 
                 RaceDataService.addRace(race_submission)
                     .then(response => {
@@ -70,16 +71,18 @@ export default function AddRaceComponent() {
                     })
             }
 
+
+
     }
 
     return(
         <div>
-            <form className="loginForm" onSubmit={handleSubmit}>
+            <form className="smallForm" onSubmit={handleSubmit}>
                 <div className="form-inner">
                     <h2>Add Race</h2>
                     {(error !== "") ? ( <div className="error">{error}</div>) : ""}
                     <DateTimePicker
-                        onChange={(date) => setRace({...race, time:date})}
+                        onChange={(date) => setRace({...race, time:new Date(date)})}
                         value={race.time}
                     />
                     <br/>

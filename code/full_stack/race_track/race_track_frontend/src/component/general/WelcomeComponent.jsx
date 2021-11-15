@@ -10,7 +10,7 @@ export default function WelcomeComponent(props){
         if(stored_user !== null){
             setUser(stored_user)
         }
-        }, []);
+    }, []);
 
     return(
         <div>
@@ -18,8 +18,12 @@ export default function WelcomeComponent(props){
                 <div className="welcome">
                     <br/><br/><br/>
                     {(user.username !== "") ? (
-                        <h2 style={{textAlign:"center"}}>Welcome to the Races {user.username}!</h2>
+                        (user.username === "admin") ? (
+                            <h2 style={{textAlign:"center"}}>Logged in with administrator privileges.</h2>
                         ) : (
+                            <h2 style={{textAlign:"center"}}>Welcome to the Races {user.username}!</h2>
+                        )
+                    ) : (
                         <h2 style={{textAlign:"center"}}>Please log in.</h2>
                     )}
                     <div className="imgbox">
