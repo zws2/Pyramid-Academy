@@ -1,4 +1,4 @@
-import React, { useState }  from 'react'
+import React, { useState, useEffect }  from 'react'
 import { useHistory } from "react-router-dom";
 import RaceDataService from '../../service/RaceDataService';
 import DateTimePicker from 'react-datetime-picker';
@@ -10,18 +10,13 @@ export default function AddRaceComponent() {
     const history = useHistory();
     const [horses, setHorses] =
         useState({
-            available: [
-                {name: "Biscuit", id: 1 },
-                {name: "Gravy", id: 2 },
-                {name: "Raisin", id: 3 },
-                {name: "Pepper", id: 4 },
-                {name: "Bean", id: 5 },
-                {name: "Peanut", id: 6 },
-                {name: "Muffin", id: 7 },
-                {name: "Meatball", id: 8 }
-            ],
+            available: [],
             added: []
         })
+
+    useEffect(() => {
+        RaceDataService.retrieveAllHorses().then(response => setHorses({...horses, available:response.data}))
+    }, []);
 
     const handleAddHorse = (horse) => {
         let temp_available = horses.available

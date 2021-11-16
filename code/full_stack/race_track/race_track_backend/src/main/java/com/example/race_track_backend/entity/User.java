@@ -17,7 +17,7 @@ public class User {
     private String email;
 
     @Column(name = "credits")
-    private String credits;
+    private double credits;
 
     @Column(name = "bets")
     private String bets;
@@ -25,7 +25,7 @@ public class User {
     public User() {
     }
 
-    public User(String username, String password, String email, String credits, String bets) {
+    public User(String username, String password, String email, double credits, String bets) {
         this.username = username;
         this.password = password;
         this.email = email;
@@ -39,7 +39,7 @@ public class User {
                 "username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
-                ", credits='" + credits + '\'' +
+                ", credits=" + credits +
                 ", bets='" + bets + '\'' +
                 '}';
     }
@@ -68,11 +68,11 @@ public class User {
         this.email = email;
     }
 
-    public String getCredits() {
+    public double getCredits() {
         return credits;
     }
 
-    public void setCredits(String credits) {
+    public void setCredits(double credits) {
         this.credits = credits;
     }
 

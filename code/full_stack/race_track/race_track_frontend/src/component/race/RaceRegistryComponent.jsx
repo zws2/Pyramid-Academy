@@ -39,12 +39,12 @@ export default function RaceRegistryComponent() {
         history.push(`/updateRace/${race.id}`)
     }
 
-    const addRaceClicked = () => {
-        history.push(`/addRace/-1`)
+    const betClicked = (race) => {
+        history.push(`/bet/${race.id}`)
     }
 
-    const betClicked = () => {
-        history.push(`/bet/-1`)
+    const addRaceClicked = () => {
+        history.push(`/addRace/-1`)
     }
 
     return(
