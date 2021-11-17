@@ -7,26 +7,37 @@ export default function BetComponent() {
     const [user, setUser] = useState({username: "", email: "", password: "", credits: 0})
     const [race, setRace] = useState({id: 0, time: "", horses: "", results: ""})
     const [amount, setAmount] = useState(0)
+    const [bets, setBets] = useState([])
     const [bet, setBet] =
         useState({
-            name: "",
             id: 0,
+            horse_name: "",
             amount_bet: 0
         })
-    const [horses, setHorses] =
-        useState({
-            available: [],
-            added: []
-        })
+    const [horses, setHorses] = useState([])
 
     useEffect(() => {
+
+        const id = parseInt(window.location.href.substring(window.location.href.lastIndexOf('/') + 1))
         const stored_user = JSON.parse(window.localStorage.getItem('user'));
         RaceDataService.retrieveUser(stored_user.username)
             .then(response => {
-                setUser(response.data)
+                const temp_user = response.data
+                setUser(temp_user)
+
+                RaceDataService.retrieveAllBets().then(response => {
+                    const temp_bets = response.data
+                    const bet_list = []
+                    for(let i=0; i<temp_bets.length; i++){
+                        if(temp_bets[i].user_username === temp_user.username
+                            && temp_bets[i].race_id === id){
+                            bet_list.push(temp_bets[i])
+                        }
+                    }
+                    setBets(bet_list)
+                })
             })
 
-        const id = window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
         RaceDataService.retrieveRace(id)
             .then(
                 response => {
@@ -37,7 +48,7 @@ export default function BetComponent() {
                         let horse = {name:horses_temp[i], id:i}
                         horses_in_race.push(horse)
                     }
-                    setHorses({...horses, available:horses_in_race})
+                    setHorses(horses_in_race)
                     setRace({
                         id: response.data.id,
                         time: response.data.time,
@@ -46,30 +57,21 @@ export default function BetComponent() {
                     })
                 }
             )
-    }, []);
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleAddHorse = (horse) => {
-        let temp_available = horses.available
+        let temp_available = horses
 
-        if(horses.available.includes(horse)){
-            temp_available.splice(horses.available.indexOf(horse), 1)
-        }
+        temp_available.splice(horses.indexOf(horse), 1)
 
-        let temp_horse = {...horse, amount:0}
-
+        let temp_horse = { id: horse.id, horse_name: horse.name, amount:0}
         setBet(temp_horse)
-    }
 
-    const handleRemoveHorse = (horse) => {
-        let temp_available = horses.available
-        let temp_added = horses.added
-
-        if(horses.added.includes(horse)){
-            temp_added.splice(horses.added.indexOf(horse), 1)
-            temp_available.push(horse)
+        let new_horses = horses
+        if(bet.horse_name !== ""){
+            new_horses.push({ id: bet.id, name: bet.horse_name })
         }
-
-        setHorses({...horses, available:temp_available, added:temp_added})
+        setHorses(new_horses)
     }
 
     const HandleSubmit = e => {
@@ -87,25 +89,43 @@ export default function BetComponent() {
         }else if(amount === 0){
             setError("Please enter an amount to bet.")
             return
-        }else if(bet.name ===""){
+        }else if(bet.horse_name ===""){
             setError("Must choose a horse.")
             return
         }else if(submitter === "bet"){
             let temp_value = parseInt(user.credits) - parseInt(amount)
 
-            let horse_to_add = {...bet, amount_bet: amount}
-            let temp_horses_added = horses.added
-            temp_horses_added.push(horse_to_add)
-            setHorses({...horses, added: temp_horses_added})
-
-            setBet({
-                name: "",
-                id: 0,
-                amount: 0
-            })
-
             if(temp_value >= 0){
                 value = temp_value
+
+                let horse_to_add = {...bet, amount_bet: amount}
+                let temp_horses_added = bets
+                temp_horses_added.push(horse_to_add)
+                setBets(temp_horses_added)
+
+                const now = new Date()
+                let temp_bet = {
+                    amount_bet: amount,
+                    timestamp: now.toLocaleString('en-US'),
+                    user_username: user.username,
+                    horse_name: bet.horse_name,
+                    race_id: race.id
+                }
+
+                RaceDataService.addBet(temp_bet)
+                RaceDataService.updateUser({...user, credits: value})
+
+                let new_horses = horses
+                if(bet.horse_name !== ""){
+                    new_horses.push({ id: bet.id, name: bet.horse_name })
+                }
+                setHorses(new_horses)
+
+                setBet({
+                    id: 0,
+                    horse_name: "",
+                    amount: 0
+                })
             }else {
                 setError("You dont have enouogh credits.")
                 return
@@ -128,7 +148,7 @@ export default function BetComponent() {
                 <div className="form-inner">
                     <h2>Place your Bet</h2>
                     <h3>credits: ${user.credits}</h3>
-                    <h3>horse: {bet.name}</h3>
+                    <h3>horse: {bet.horse_name}</h3>
                     {(error !== "") ? ( <div className="error">{error}</div>) : ""}
 
                     <div className="form-group">
@@ -158,7 +178,7 @@ export default function BetComponent() {
                         </tr>
                     </thead>
                     <tbody style={{height:"10em", overflow:"scroll"}}>
-                        {horses.available.map (
+                        {horses.map (
                             horse =>
                             <tr style={{textAlign: "center"}} key={horse.id}>
                                 <td>{horse.name}</td>
@@ -183,18 +203,11 @@ export default function BetComponent() {
                         </tr>
                     </thead>
                     <tbody>
-                        {horses.added.map (
-                            horse =>
-                            <tr style={{textAlign: "center"}} key={horse.id}>
-                                <td>{horse.name}: </td>
-                                <td>${horse.amount_bet}</td>
-                                <td>
-                                    <button
-                                        type="button"
-                                        className="btn btn-warning"
-                                        onClick={() => handleRemoveHorse(horse)}
-                                    >-</button>
-                                </td>
+                        {bets.map (
+                            bet =>
+                            <tr style={{textAlign: "center"}} key={bet.id}>
+                                <td>{bet.horse_name}: </td>
+                                <td>${bet.amount_bet}</td>
                             </tr>
                         )}
                     </tbody>

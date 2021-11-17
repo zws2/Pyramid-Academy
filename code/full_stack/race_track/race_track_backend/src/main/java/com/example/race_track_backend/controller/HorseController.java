@@ -25,9 +25,9 @@ public class HorseController {
         return horseService.findAll();
     }
 
-    @GetMapping("/retrieveHorse/{id}")
-    public Horse findHorse(@PathVariable int id) {
-        return (Horse)horseService.findById(id);
+    @GetMapping("/retrieveHorse/{name}")
+    public Horse findHorse(@PathVariable String name) {
+        return (Horse)horseService.findById(name);
     }
 
     //This is a POST request to add a new horse.
@@ -46,10 +46,10 @@ public class HorseController {
     }
 
     //http://localhost:8080/deleteHorse/1
-    @DeleteMapping("/deleteHorse/{id}")
-    public String deleteHorse(@PathVariable int id) {
-        horseService.deleteById(id);
-        return "Deleted horse id : " + id;
+    @DeleteMapping("/deleteHorse/{name}")
+    public String deleteHorse(@PathVariable String name) {
+        horseService.deleteById(name);
+        return "Deleted horse name : " + name;
     }
 
 }

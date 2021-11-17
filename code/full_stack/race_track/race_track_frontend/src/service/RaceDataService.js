@@ -81,5 +81,25 @@ class RaceDataService {
     addBet(bet) {
         return axios.post(`http://localhost:8080/addBet/`, bet)
     }
+    
+    retrieveAllNotifications() {
+        return axios.get(`http://localhost:8080/retrieveAllNotifications`);
+    }
+
+    retrieveNotification(id) {
+        return axios.get(`http://localhost:8080/retrieveNotification/${id}`);
+    }
+
+    deleteNotification(id) {
+        return axios.delete(`http://localhost:8080/deleteNotification/${id}`)
+    }
+
+    updateNotification(notification) {
+        return axios.put(`http://localhost:8080/updateNotification/`, notification)
+    }
+
+    addNotification(notification) {
+        return axios.post(`http://localhost:8080/addNotification/`, notification)
+    }
 }
 export default new RaceDataService()

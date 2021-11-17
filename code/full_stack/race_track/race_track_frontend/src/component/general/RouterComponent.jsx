@@ -10,6 +10,7 @@ import BetComponent from '../race/BetComponent'
 import LoginForm from '../user/LoginForm'
 import RegisterForm from '../user/RegisterForm'
 import ProfileComponent from '../user/ProfileComponent'
+import NotificationComponent from '../user/NotificationComponent'
 
 function RouterComponent(){
    return(
@@ -25,6 +26,7 @@ function RouterComponent(){
                 <Route path="/bet/:id"><BetComponent /></Route>
                 <Route path="/raceRegistry"><RaceRegistryComponent /></Route>
                 <Route path="/profile"><ProfileComponent /></Route>
+                <Route path="/notifications"><NotificationComponent /></Route>
             </Switch>
             <FooterComponent/>
         </ Router>

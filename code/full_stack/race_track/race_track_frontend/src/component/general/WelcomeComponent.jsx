@@ -1,7 +1,7 @@
 import React, { useState, useEffect }  from 'react';
 import pic from './horse.jpg';
 
-export default function WelcomeComponent(props){
+export default function WelcomeComponent(){
 
     const [user, setUser] = useState({username: ""})
 
@@ -10,7 +10,7 @@ export default function WelcomeComponent(props){
         if(stored_user !== null){
             setUser(stored_user)
         }
-    }, []);
+    }, [])
 
     return(
         <div>
@@ -30,7 +30,7 @@ export default function WelcomeComponent(props){
                         <img className="img-fluid center-fit" alt="a weiner dog running" src={pic}/>
                     </div>
                 </div>
-            </div >
+            </div>
         </div>
     )
 }

@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface HorseService {
     List<Horse> findAll();
-    Object findById(int id);
+    Object findById(String name);
     void saveOrUpdate(Horse theHorse);
-    void deleteById(int id);
+    void deleteById(String name);
 }

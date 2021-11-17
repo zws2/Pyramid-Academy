@@ -10,9 +10,6 @@ import javax.persistence.Table;
 public class Horse {
 
     @Id
-    @Column(name = "id")
-    private int id;
-
     @Column(name = "name")
     private String name;
 
@@ -26,8 +23,7 @@ public class Horse {
     public Horse() {
     }
 
-    public Horse(int id, String name, float fitness, String record) {
-        this.id = id;
+    public Horse(String name, float fitness, String record) {
         this.name = name;
         this.fitness = fitness;
         this.record = record;
@@ -36,19 +32,10 @@ public class Horse {
     @Override
     public String toString() {
         return "Horse{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
+                "name='" + name + '\'' +
                 ", fitness=" + fitness +
                 ", record='" + record + '\'' +
                 '}';
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {

@@ -15,7 +15,7 @@ export default function RaceRegistryComponent() {
             setUser(stored_user)
         }
         refreshRaceRegistry()
-    }, []);
+    }, [])
 
     const refreshRaceRegistry = () => {
             RaceDataService.retrieveAllRaces()
@@ -85,6 +85,7 @@ export default function RaceRegistryComponent() {
                                        >Update</button></td>
                                    </React.Fragment>
                                ) : (
+                                   race.results === "" &&
                                    <React.Fragment>
                                        <td><button
                                            className="btn btn-success"

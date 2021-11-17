@@ -15,8 +15,17 @@ export default function AddRaceComponent() {
         })
 
     useEffect(() => {
-        RaceDataService.retrieveAllHorses().then(response => setHorses({...horses, available:response.data}))
-    }, []);
+        RaceDataService.retrieveAllHorses().then(response => {
+        let horses_in_race = []
+
+        for(let i=0; i<response.data.length; i++){
+            let horse = {name:response.data[i].name, id:i}
+            horses_in_race.push(horse)
+        }
+        setHorses({...horses, available:horses_in_race})
+
+
+    })}, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleAddHorse = (horse) => {
         let temp_available = horses.available

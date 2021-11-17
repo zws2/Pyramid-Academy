@@ -13,8 +13,8 @@ public class Bet {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "amount")
-    private double amount;
+    @Column(name = "amount_bet")
+    private double amount_bet;
 
     @Column(name = "timestamp")
     private String timestamp;
@@ -22,8 +22,8 @@ public class Bet {
     @Column(name = "user_username")
     private String user_username;
 
-    @Column(name = "horse_id")
-    private int horse_id;
+    @Column(name = "horse_name")
+    private String horse_name;
 
     @Column(name = "race_id")
     private int race_id;
@@ -31,12 +31,12 @@ public class Bet {
     public Bet() {
     }
 
-    public Bet(int id, double amount, String timestamp, String user_username, int horse_id, int race_id) {
+    public Bet(int id, double amount_bet, String timestamp, String user_username, String horse_name, int race_id) {
         this.id = id;
-        this.amount = amount;
+        this.amount_bet = amount_bet;
         this.timestamp = timestamp;
         this.user_username = user_username;
-        this.horse_id = horse_id;
+        this.horse_name = horse_name;
         this.race_id = race_id;
     }
 
@@ -44,10 +44,10 @@ public class Bet {
     public String toString() {
         return "Bet{" +
                 "id=" + id +
-                ", amount=" + amount +
+                ", amount_bet=" + amount_bet +
                 ", timestamp='" + timestamp + '\'' +
                 ", user_username='" + user_username + '\'' +
-                ", horse_id=" + horse_id +
+                ", horse_name='" + horse_name + '\'' +
                 ", race_id=" + race_id +
                 '}';
     }
@@ -60,12 +60,12 @@ public class Bet {
         this.id = id;
     }
 
-    public double getAmount() {
-        return amount;
+    public double getAmount_bet() {
+        return amount_bet;
     }
 
-    public void setAmount(double amount) {
-        this.amount = amount;
+    public void setAmount_bet(double amount_bet) {
+        this.amount_bet = amount_bet;
     }
 
     public String getTimestamp() {
@@ -84,12 +84,12 @@ public class Bet {
         this.user_username = user_username;
     }
 
-    public int getHorse_id() {
-        return horse_id;
+    public String getHorse_name() {
+        return horse_name;
     }
 
-    public void setHorse_id(int horse_id) {
-        this.horse_id = horse_id;
+    public void setHorse_name(String horse_name) {
+        this.horse_name = horse_name;
     }
 
     public int getRace_id() {

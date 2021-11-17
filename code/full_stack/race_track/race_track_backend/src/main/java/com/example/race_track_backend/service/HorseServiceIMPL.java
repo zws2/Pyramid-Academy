@@ -24,8 +24,8 @@ public class HorseServiceIMPL implements HorseService {
     }
 
     @Override
-    public Object findById(int id) {
-        return horseDAO.findById(id);
+    public Object findById(String name) {
+        return horseDAO.findById(name);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class HorseServiceIMPL implements HorseService {
     }
 
     @Override
-    public void deleteById(int id) {
-        horseDAO.deleteById(id);
+    public void deleteById(String name) {
+        horseDAO.deleteById(name);
     }
 }

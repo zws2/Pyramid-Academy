@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import {Link} from 'react-router-dom'
 import { useHistory } from "react-router-dom";
+import bell from './bell.png';
 
 export default function HeaderComponent(){
 
@@ -36,6 +37,14 @@ export default function HeaderComponent(){
                     <h3><Link className="nav-link" to="/">Home</Link></h3>
                     <h3><Link className="nav-link" to="/raceRegistry">Races</Link></h3>
                     <h3><Link className="nav-link" to="/profile">Profile</Link></h3>
+                    <h3><Link className="nav-link" to="/notifications">
+                        <img
+                            alt="notifications"
+                            src={bell}
+                            style={{height:"35px"}}
+                        />
+                        Notifications
+                    </Link></h3>
                     {(user.username !== "") ? (
                         <button onClick={Logout} style={{position:"absolute", right:"30px"}}>Logout</button>
                         ) : (
