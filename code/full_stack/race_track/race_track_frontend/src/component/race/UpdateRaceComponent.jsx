@@ -1,113 +1,171 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useHistory } from "react-router-dom";
 import RaceDataService from '../../service/RaceDataService'
-import FooterComponent from '../header_footer/FooterComponent';
 
-class UpdateRaceComponent extends Component {
-    constructor(props) {
-        super(props)
+export default function UpdateRaceComponent() {
 
-        this.state = {
-            id: this.props.match.params.id,
-            title: '',
-            caption: '',
-            contributor: '',
-            img: ''
-        }
+    const [race, setRace] = useState({id: 0, time: "", horses: "", results: ""})
+    const [error, setError] = useState("")
+    const history = useHistory();
+    const [horses, setHorses] =
+            useState({
+                available: [],
+                added: []
+            })
 
-        this.handleSubmit = this.handleSubmit.bind(this)
-        this.handleChange = this.handleChange.bind(this)
-        this.handleFile = this.handleFile.bind(this)
-    }
-
-    componentDidMount(){
-        RaceDataService.retrieveRace(this.props.match.params.id)
+    useEffect(() => {
+        const id = window.location.href.substring(window.location.href.lastIndexOf('/') + 1)
+        RaceDataService.retrieveRace(id)
             .then(
                 response => {
-                    this.setState({
+                    let horses_temp = response.data.horses.split(",")
+                    let horses_in_race = []
+
+                    for(let i=0; i<horses_temp.length; i++){
+                        let horse = {name:horses_temp[i], id:i}
+                        horses_in_race.push(horse)
+                    }
+                    setHorses({...horses, available:horses_in_race})
+                    setRace({
                         id: response.data.id,
-                        title: response.data.title,
-                        caption: response.data.caption,
-                        contributor: response.data.contributor,
-                        img: response.data.img
+                        time: response.data.time,
+                        horses: response.data.horses,
+                        results: response.data.results
                     })
                 }
             )
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+    const handleAddHorse = (horse) => {
+        let temp_available = horses.available
+        let temp_added = horses.added
+
+        if(horses.available.includes(horse)){
+            temp_available.splice(horses.available.indexOf(horse), 1)
+            temp_added.push(horse)
+        }
+
+        setHorses({...horses, available:temp_available, added: temp_added})
     }
 
-    handleChange(event) {
-            this.setState({
-                [event.target.name]: event.target.value
-            })
+    const handleRemoveHorse = (horse) => {
+        let temp_available = horses.available
+        let temp_added = horses.added
+
+        if(horses.added.includes(horse)){
+            temp_added.splice(horses.added.indexOf(horse), 1)
+            temp_available.push(horse)
+        }
+
+        setHorses({...horses, available:temp_available, added:temp_added})
     }
 
-    handleFile(event){
-        const preview = document.querySelector('img')
-        const file = document.querySelector('input[type=file]').files[0]
-        const reader = new FileReader()
+    const handleSubmit = e => {
+        e.preventDefault()
+        if(horses.added.length !== 6){
+            setError("please select 6 horses")
+        }else{
 
-        reader.addEventListener("load", function () {
-            preview.src = reader.result
-        }, false)
+            let str = horses.added[0].name
+            for(let i=1; i<horses.added.length; i++){
+                str += ", " + horses.added[i].name
+            }
 
-        if (file) {
-            reader.readAsDataURL(file)
+            let race_submission = race
+            race_submission.results = str
+
+            RaceDataService.updateRace(race_submission)
+                .then(response => {
+                    if(response.status < 300){
+                        history.push('/raceRegistry')
+                    }
+                })
         }
     }
 
-    handleSubmit() {
-        const preview = document.querySelector('img')
-        let image_source = preview.src.substring(
-        preview.src.indexOf(",") + 1,
-        preview.src.length)
-
-        let race = {
-            id: this.state.id,
-            title: this.state.title,
-            caption: this.state.caption,
-            contributor: this.state.contributor,
-            img: image_source
-        }
-        RaceDataService.updateRace(race)
-            .then(this.props.history.push(`/raceRegistry`))
-    }
-
-
-    render() {
-
-        console.log("render")
-
-        return(
-            <div>
-                <div className="jumbotron" style={{height:"50px", backgroundColor: "gray"}}>
-                    <h3 style={{textAlign: "center"}}>Update Race</h3>
+    return(
+        <div>
+            <form className="smallForm" onSubmit={handleSubmit}>
+                <div className="form-inner">
+                    <h2>Update Race</h2>
+                    <div>
+                        <label>Race ID: {race.id}</label>
+                        {(error !== "") ? ( <div className="error">{error}</div>) : ""}
+                    </div>
+                    <br/>
+                    <div>
+                        <label>Time:</label>
+                        <input
+                            className="form-control"
+                            type="text"
+                            name="time"
+                            onChange={e => setRace({...race, time: e.target.value})}
+                            value={race.time}
+                        />
+                    </div>
+                    <div>
+                        <label>Horses:</label>
+                        <input
+                            className="form-control"
+                            type="text"
+                            name="horses"
+                            onChange={e => setRace({...race, horses: e.target.value})}
+                            value={race.horses}
+                        />
+                    </div>
+                    <input className="btn btn-success" type="submit" value="Submit" name="submit"/>
                 </div>
-                <div className="container">
-                    <form onSubmit={this.handleSubmit}>
-                        <div>
-                            <label>Title</label>
-                            <input className="form-control" type="text" name="title" value={this.state.title} onChange={this.handleChange}/>
-                        </div>
-                        <div>
-                            <label>Caption</label>
-                            <input className="form-control" type="text" name="caption" value={this.state.caption} onChange={this.handleChange}/>
-                        </div>
-                        <div>
-                            <label>Contributor</label>
-                            <input className="form-control" type="text" name="contributor" value={this.state.contributor} onChange={this.handleChange}/>
-                        </div>
-                        <div>
-                            <br/>
-                            <input type="file" name="img" onChange={this.handleFile}/>
-                            <img src={"data:image/png;base64," + this.state.img} height="200" alt="preview..."></img>
-                        </div><br/>
-                        <input className="btn btn-success" type="submit" value="Submit" name="submit"/>
-                    </form>
-                <br/><br/>
-                </div>
-                <FooterComponent />
+            </form>
+            <br/><br/><br/><br/>
+            <div className="left-horse-container">
+                <table className="table table-striped">
+                    <thead>
+                        <tr className="table-dark" style={{textAlign: "center"}}>
+                            <th>Runners</th>
+                        </tr>
+                    </thead>
+                    <tbody style={{height:"10em", overflow:"scroll"}}>
+                        {horses.available.map (
+                            horse =>
+                            <tr style={{textAlign: "center"}} key={horse.id}>
+                                <td>{horse.name}</td>
+                                <td>
+                                    <button
+                                        type="button"
+                                        className="btn btn-success"
+                                        onClick={() => handleAddHorse(horse)}
+                                    >+</button>
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
             </div>
-        )
-    }
+            <ol className="right-horse-container">
+                <table className="table table-striped">
+                    <thead>
+                        <tr className="table-dark" style={{textAlign: "center"}}>
+                            <th>Results</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {horses.added.map (
+                            horse =>
+                            <tr style={{textAlign: "center"}} key={horse.id}>
+                                <td>{horse.name}</td>
+                                <td><li/></td>
+                                <td>
+                                    <button
+                                        type="button"
+                                        className="btn btn-warning"
+                                        onClick={() => handleRemoveHorse(horse)}
+                                    >-</button>
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </ol>
+        </div>
+    )
 }
-
-export default UpdateRaceComponent

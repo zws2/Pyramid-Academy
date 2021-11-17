@@ -25,17 +25,15 @@ public class UserController {
         return userService.findAll();
     }
 
-    @GetMapping("/retrieveUser/{userId}")
-    public User findUser(@PathVariable int userId) {
-        return (User)userService.findById(userId);
+    @GetMapping("/retrieveUser/{username}")
+    public User findUser(@PathVariable String username) {
+        return (User)userService.findById(username);
     }
 
     //This is a POST request to add a new user.
     //http://localhost:8080/addUser
     @PostMapping("/addUser")
     public User addUser(@RequestBody User theUser) {
-        theUser.setId(0);
-
         userService.saveOrUpdate(theUser);
         return theUser;
     }
@@ -48,10 +46,10 @@ public class UserController {
     }
 
     //http://localhost:8080/deleteUser/1
-    @DeleteMapping("/deleteUser/{userId}")
-    public String deleteUser(@PathVariable int userId) {
-        userService.deleteById(userId);
-        return "Deleted user id : " + userId;
+    @DeleteMapping("/deleteUser/{username}")
+    public String deleteUser(@PathVariable String username) {
+        userService.deleteById(username);
+        return "Deleted user id : " + username;
     }
 
 }

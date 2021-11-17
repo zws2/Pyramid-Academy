@@ -2,8 +2,7 @@ package com.example.race_track_backend.dao;
 
 //IMPORTANT If your code is not working your imports might be incorrect
 
-import com.example.race_track_backend.dao.UserDAO;
-import com.example.race_track_backend.entity.User;
+import com.example.race_track_backend.entity.Horse;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 @Repository
-public class UserIMPL implements UserDAO {
+public class HorseIMPL implements HorseDAO {
 
     //Define field for entity manager
     /*The EntityManager API is used to create and remove persistent entity instances,
@@ -23,37 +22,37 @@ public class UserIMPL implements UserDAO {
 
     //Set up constructor injection
     @Autowired
-    public UserIMPL(EntityManager entityManager) {
+    public HorseIMPL(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 
     @Override
     @Transactional //Defines the scope of a single database transaction.
-    public List<User> findAll() {
+    public List<Horse> findAll() {
         Session currentSession = entityManager.unwrap(Session.class);
-        Query<User> myQuery = currentSession.createQuery("from User");
+        Query<Horse> myQuery = currentSession.createQuery("from Horse");
         return myQuery.getResultList();
     }
 
     @Override
     @Transactional //Defines the scope of a single database transaction.
-    public User findById(String username) {
+    public Horse findById(String name) {
         Session currentSession = entityManager.unwrap(Session.class);
-        return currentSession.get(User.class, username);
+        return currentSession.get(Horse.class, name);
     }
 
     @Override
     @Transactional //Defines the scope of a single database transaction.
-    public void saveOrUpdate(User theUser) {
+    public void saveOrUpdate(Horse theHorse) {
         Session currentSession = entityManager.unwrap(Session.class);
-        currentSession.saveOrUpdate(theUser);
+        currentSession.saveOrUpdate(theHorse);
     }
 
     @Override
     @Transactional //Defines the scope of a single database transaction.
-    public void deleteById(String username) {
+    public void deleteById(String name) {
         Session currentSession = entityManager.unwrap(Session.class);
-        User myUser = currentSession.get(User.class, username);
-        currentSession.delete(myUser);
+        Horse myHorse = currentSession.get(Horse.class, name);
+        currentSession.delete(myHorse);
     }
 }

@@ -1,75 +1,149 @@
-import React, {Component} from 'react'
-import RaceDataService from '../../service/RaceDataService'
-import FooterComponent from '../header_footer/FooterComponent';
+import React, { useState, useEffect }  from 'react'
+import { useHistory } from "react-router-dom";
+import RaceDataService from '../../service/RaceDataService';
+import DateTimePicker from 'react-datetime-picker';
 
-class AddRaceComponent extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            id: this.props.match.params.id,
-            title: '',
-            caption: '',
-            contributor: '',
-            img: '',
-        }
-        this.handleSubmit = this.handleSubmit.bind(this)
-        this.handleChange = this.handleChange.bind(this)
-        this.handleFile = this.handleFile.bind(this)
-    }
+export default function AddRaceComponent() {
 
-    handleChange(event) {
-        this.setState({
-            [event.target.name]: event.target.value
+    const [race, setRace] = useState({id: -1, time: "", horses: "", results: ""})
+    const [error, setError] = useState("")
+    const history = useHistory();
+    const [horses, setHorses] =
+        useState({
+            available: [],
+            added: []
         })
-    }
 
-    handleSubmit() {
-        console.log("submit")
+    useEffect(() => {
+        RaceDataService.retrieveAllHorses().then(response => {
+        let horses_in_race = []
 
-        let race = {
-            id: this.state.id,
-            title: this.state.title,
-            caption: this.state.caption,
-            contributor: this.state.contributor
+        for(let i=0; i<response.data.length; i++){
+            let horse = {name:response.data[i].name, id:i}
+            horses_in_race.push(horse)
+        }
+        setHorses({...horses, available:horses_in_race})
+
+
+    })}, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+    const handleAddHorse = (horse) => {
+        let temp_available = horses.available
+        let temp_added = horses.added
+
+        if(horses.available.includes(horse)){
+            temp_available.splice(horses.available.indexOf(horse), 1)
+            temp_added.push(horse)
         }
 
-        RaceDataService.addRace(race)
-            .then(this.props.history.push(`/raceRegistry`))
+        setHorses({...horses, available:temp_available, added: temp_added})
     }
 
-    render() {
-        return(
-            <div>
-                <div className="jumbotron" style={{height: "50px", backgroundColor: "gray"}}>
-                <h3 style={{textAlign: "center"}}>Add Race</h3>
+    const handleRemoveHorse = (horse) => {
+        let temp_available = horses.available
+        let temp_added = horses.added
+
+        if(horses.added.includes(horse)){
+            temp_added.splice(horses.added.indexOf(horse), 1)
+            temp_available.push(horse)
+        }
+
+        setHorses({...horses, available:temp_available, added:temp_added})
+    }
+
+    const handleSubmit = e => {
+            e.preventDefault()
+
+            if(horses.added.length !== 6){
+                setError("please select 6 horses")
+            }else{
+
+                let str = horses.added[0].name
+                for(let i=1; i<horses.added.length; i++){
+                    str += ", " + horses.added[i].name
+                }
+
+                let race_submission = race
+                race_submission.horses = str
+                race_submission.time = race.time.toLocaleString("en-US")
+
+                RaceDataService.addRace(race_submission)
+                    .then(response => {
+                        if(response.status < 300){
+                            history.push('/raceRegistry')
+                        }
+                    })
+            }
+
+
+
+    }
+
+    return(
+        <div>
+            <form className="smallForm" onSubmit={handleSubmit}>
+                <div className="form-inner">
+                    <h2>Add Race</h2>
+                    {(error !== "") ? ( <div className="error">{error}</div>) : ""}
+                    <DateTimePicker
+                        onChange={(date) => setRace({...race, time:new Date(date)})}
+                        value={race.time}
+                    />
+                    <br/>
+                    <div>
+                         <input className="btn btn-success" type="submit" value="Submit" name="submit"/>
+                    </div>
                 </div>
-                <div className="container">
-                    <form onSubmit={this.handleSubmit}>
-                        <div>
-                            <label>Title:</label>
-                            <input className="form-control" type="text" name="title" onChange={this.handleChange}/>
-                        </div>
-                        <div>
-                            <label>Caption:</label>
-                            <input className="form-control" type="text" name="caption" onChange={this.handleChange}/>
-                        </div>
-                        <div>
-                            <label>Contributor:</label>
-                            <input className="form-control" type="text" name="contributor" onChange={this.handleChange}/>
-                        </div>
-                        <div>
-                        <br />
-                             <input type="file" name="img" onChange={this.handleFile}/>
-                             <img src="" height="200" alt="preview..."></img>
-                        </div>
-                        <br />
-                             <input className="btn btn-success" type="submit" value="Submit" name="submit"/>
-                    </form><br/><br/>
-                </div>
-                <FooterComponent />
+            </form>
+            <br/><br/><br/><br/>
+            <div className="left-horse-container">
+                <table className="table table-striped">
+                    <thead>
+                        <tr className="table-dark" style={{textAlign: "center"}}>
+                            <th>Available Horses</th>
+                        </tr>
+                    </thead>
+                    <tbody style={{height:"10em", overflow:"scroll"}}>
+                        {horses.available.map (
+                            horse =>
+                            <tr style={{textAlign: "center"}} key={horse.id}>
+                                <td>{horse.name}</td>
+                                <td>
+                                    <button
+                                        type="button"
+                                        className="btn btn-success"
+                                        onClick={() => handleAddHorse(horse)}
+                                    >+</button>
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
             </div>
-        )
-    }
+            <div className="right-horse-container">
+                <table className="table table-striped">
+                    <thead>
+                        <tr className="table-dark" style={{textAlign: "center"}}>
+                            <th>Added Horses</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {horses.added.map (
+                            horse =>
+                            <tr style={{textAlign: "center"}} key={horse.id}>
+                                <td>{horse.name}</td>
+                                <td>
+                                    <button
+                                        type="button"
+                                        className="btn btn-warning"
+                                        onClick={() => handleRemoveHorse(horse)}
+                                    >-</button>
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    )
 }
-
-export default AddRaceComponent

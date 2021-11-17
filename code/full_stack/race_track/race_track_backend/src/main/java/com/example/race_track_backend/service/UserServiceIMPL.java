@@ -25,8 +25,8 @@ public class UserServiceIMPL implements UserService {
     }
 
     @Override
-    public Object findById(int userId) {
-        return userDAO.findById(userId);
+    public Object findById(String username) {
+        return userDAO.findById(username);
     }
 
     @Override
@@ -35,7 +35,7 @@ public class UserServiceIMPL implements UserService {
     }
 
     @Override
-    public void deleteById(int userId) {
-        userDAO.deleteById(userId);
+    public void deleteById(String username) {
+        userDAO.deleteById(username);
     }
 }

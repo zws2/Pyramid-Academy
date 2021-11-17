@@ -1,17 +1,14 @@
 package com.example.race_track_backend.entity;
 
 import javax.persistence.*;
-import java.sql.Blob;
 
-//Race Entity
-@Entity //This will let Java know that this is an entity that we are going to map to a database table.
-@Table(name = "race") //This is for the actual name of the database table we are mapping to the class.
+@Entity
+@Table(name = "race")
 public class Race {
 
-    //Define fields
-    @Id //This will map the primary key.
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //This will auto increment your primary key
-    @Column(name = "id") //This is mapping the primary key to the id column in the table.
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
 
     @Column(name = "time")

@@ -26,8 +26,8 @@ class RaceDataService {
             return axios.get(`http://localhost:8080/retrieveAllUsers`);
     }
 
-    retrieveUser(id) {
-        return axios.get(`http://localhost:8080/retrieveUser/${id}`);
+    retrieveUser(username) {
+        return axios.get(`http://localhost:8080/retrieveUser/${username}`);
     }
 
     deleteUser(id) {
@@ -41,6 +41,65 @@ class RaceDataService {
     addUser(user){
         return axios.post(`http://localhost:8080/addUser/`, user)
     }
-}
+    
+    retrieveAllHorses() {
+        return axios.get(`http://localhost:8080/retrieveAllHorses`);
+    }
 
+    retrieveHorse(id) {
+        return axios.get(`http://localhost:8080/retrieveHorse/${id}`);
+    }
+
+    deleteHorse(id) {
+        return axios.delete(`http://localhost:8080/deleteHorse/${id}`)
+    }
+
+    updateHorse(horse) {
+        return axios.put(`http://localhost:8080/updateHorse/`, horse)
+    }
+
+    addHorse(horse) {
+        return axios.post(`http://localhost:8080/addHorse/`, horse)
+    }
+        
+    retrieveAllBets() {
+        return axios.get(`http://localhost:8080/retrieveAllBets`);
+    }
+
+    retrieveBet(id) {
+        return axios.get(`http://localhost:8080/retrieveBet/${id}`);
+    }
+
+    deleteBet(id) {
+        return axios.delete(`http://localhost:8080/deleteBet/${id}`)
+    }
+
+    updateBet(bet) {
+        return axios.put(`http://localhost:8080/updateBet/`, bet)
+    }
+
+    addBet(bet) {
+        return axios.post(`http://localhost:8080/addBet/`, bet)
+    }
+    
+    retrieveAllNotifications() {
+        return axios.get(`http://localhost:8080/retrieveAllNotifications`);
+    }
+
+    retrieveNotification(id) {
+        return axios.get(`http://localhost:8080/retrieveNotification/${id}`);
+    }
+
+    deleteNotification(id) {
+        return axios.delete(`http://localhost:8080/deleteNotification/${id}`)
+    }
+
+    updateNotification(notification) {
+        return axios.put(`http://localhost:8080/updateNotification/`, notification)
+    }
+
+    addNotification(notification) {
+        return axios.post(`http://localhost:8080/addNotification/`, notification)
+    }
+}
 export default new RaceDataService()

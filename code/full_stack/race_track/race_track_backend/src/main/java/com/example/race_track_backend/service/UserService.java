@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface UserService {
     List<User> findAll();
-    Object findById(int userId);
+    Object findById(String username);
     void saveOrUpdate(User theUser);
-    void deleteById(int userId);
+    void deleteById(String username);
 }

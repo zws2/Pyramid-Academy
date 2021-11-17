@@ -1,96 +1,103 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useHistory } from 'react-router-dom';
 import RaceDataService from '../../service/RaceDataService';
-import FooterComponent from '../header_footer/FooterComponent';
 
-class RaceRegistryComponent extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            races: []
+export default function RaceRegistryComponent() {
+
+    const [races, setRaces] = useState([])
+    const [user, setUser] = useState({username: ""})
+    const [message, setMessage] = useState("")
+    const history = useHistory();
+
+    useEffect(() => {
+        const stored_user = JSON.parse(window.localStorage.getItem('user'));
+        if(stored_user !== null){
+            setUser(stored_user)
         }
-        this.refreshRaceRegistry = this.refreshRaceRegistry.bind(this)
-        this.deleteRaceClicked = this.deleteRaceClicked.bind(this)
-        this.upDateRaceClicked = this.upDateRaceClicked.bind(this)
-        this.addRaceClicked = this.addRaceClicked.bind(this)
-    }
+        refreshRaceRegistry()
+    }, [])
 
-    componentDidMount() {
-        this.refreshRaceRegistry()
-    }
-
-    refreshRaceRegistry() {
-        setTimeout(() => {
+    const refreshRaceRegistry = () => {
             RaceDataService.retrieveAllRaces()
                 .then(
                     response => {
-                            this.setState({
-                            races: response.data})})
-        }, 500)
+                            setRaces(response.data)})
     }
 
-    deleteRaceClicked(id, title, caption) {
+    const deleteRaceClicked = (id) => {
         RaceDataService.deleteRace(id)
         .then(
             response => {
-                this.setState({message: `Deleted Race: ${title}`})
-                alert(this.state.message)
-                this.refreshRaceRegistry()
+                setMessage(`Deleted Race: ${id}`)
+                alert(message)
+                refreshRaceRegistry()
             }
         )
     }
     
-    upDateRaceClicked(race) {
-        this.props.history.push(`/updateRace/${race.id}`)
+    const updateRaceClicked = (race) => {
+        history.push(`/updateRace/${race.id}`)
     }
 
-    addRaceClicked() {
-        this.props.history.push(`/addRace/-1`)
+    const betClicked = (race) => {
+        history.push(`/bet/${race.id}`)
     }
 
-   render() {
-        return(
-           <div className="container">
-               <h1 style={{textAlign:"center"}}>Race Registry</h1><br/>
-               <div className="jumbotron sticky-top"  style={{textAlign: "center",  color: "white"}}>
-               
-                   <table className="table table-striped">
-                       <thead>
-                           <tr class="table-dark" style={{textAlign: "center"}}>
-                               <th>Id</th>
-                               <th>Title</th>
-                               <th>Caption</th>
-                               <th>Contributor</th>
-                               <th></th>
-                               <th>
-                                    <div >
-                                        <br/>
-                                        <button className="btn btn-primary" onClick={this.addRaceClicked}>Add Race</button>
-                                    </div>
-                               </th>
-                           </tr>
-                       </thead>
-                       <tbody>
-                           {
-                               this.state.races.map (
-                                   race =>
-                                   <tr style={{textAlign: "center"}} key={race.id}>
-                                       <td>{race.id}</td>
-                                       <td>{race.time}</td>
-                                       <td>{race.horses}</td>
-                                       <td>{race.results}</td>
-                                       <td><button className="btn btn-warning" onClick={() => this.deleteRaceClicked(race.id, race.time, race.horses)}>Delete</button></td>
-                                       <td><button className="btn btn-success" onClick={() => this.upDateRaceClicked(race)}>Update</button></td>
-                                   </tr>
-                               )
+    const addRaceClicked = () => {
+        history.push(`/addRace/-1`)
+    }
+
+    return(
+        <div>
+            <br/>
+            <h1 style={{textAlign:"center", marginTop:"60px"}}>Race Registry</h1>
+            <div className="container">
+               <table className="table table-striped">
+                   <thead>
+                       <tr className="table-dark" style={{textAlign: "center"}}>
+                           <th>Id</th>
+                           <th>Time</th>
+                           <th>Horses</th>
+                           <th>Results</th>
+                           <th></th>
+                           {(user.username === "admin") &&
+                               <th><button className="btn btn-primary" onClick={addRaceClicked}>Add Race</button></th>
                            }
-                       </tbody>
-                        <br/>
-                   </table>
-               </div>
-                <FooterComponent />
+                       </tr>
+                   </thead>
+                   <tbody>
+                       {races.map (
+                           race =>
+                           <tr style={{textAlign: "center"}} key={race.id}>
+                               <td>{race.id}</td>
+                               <td>{race.time}</td>
+                               <td>{race.horses}</td>
+                               <td>{race.results}</td>
+                               {(user.username === "admin") ? (
+                                   <React.Fragment>
+                                       <td><button
+                                           className="btn btn-danger"
+                                           onClick={() => deleteRaceClicked(race.id, race.time, race.results)}
+                                       >Delete</button></td>
+                                       <td><button
+                                           className="btn btn-success"
+                                           onClick={() => updateRaceClicked(race)}
+                                       >Update</button></td>
+                                   </React.Fragment>
+                               ) : (
+                                   race.results === "" &&
+                                   <React.Fragment>
+                                       <td><button
+                                           className="btn btn-success"
+                                           onClick={() => betClicked(race)}
+                                       >Bet</button></td>
+                                   </React.Fragment>
+                               )}
+                           </tr>
+                       )}
+                   </tbody>
+               </table>
            </div>
-        )
-   } 
+       </div>
+    )
 }
-
-export default RaceRegistryComponent;

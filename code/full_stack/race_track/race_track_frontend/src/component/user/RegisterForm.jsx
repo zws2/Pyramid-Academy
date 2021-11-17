@@ -1,29 +1,41 @@
 import React, { useState } from 'react';
-import FooterComponent from '../header_footer/FooterComponent';
-import { useHistory } from "react-router-dom";
+import { useHistory} from "react-router-dom";
 import RaceDataService from '../../service/RaceDataService'
 
 export default function RegisterForm() {
 
-    const [details, setDetails] = useState({username: "", email: "", password: ""})
+    const [details, setDetails] = useState({username: "", email: "", password: "", credits: 0})
     const [error, setError] = useState("")
-
-
     const history = useHistory();
+
     const HandleSubmit = e => {
         e.preventDefault()
 
-        if(true){
-            window.localStorage.setItem('user', JSON.stringify(details));
-            RaceDataService.addUser(details)
-                        .then(history.push(`/`))
+        if(details.username === ""){
+            setError("Must enter a username.")
+        }else if (details.email === ""){
+            setError("Must enter an email.")
+        }else if (details.password === ""){
+            setError("Must enter a password.")
         }else{
-            setError("Details do not match")
+            RaceDataService.retrieveUser(details.username)
+                .then( response => {
+                    if(response.data === ""){
+                        window.localStorage.setItem('user', JSON.stringify(details))
+                        RaceDataService.addUser(details)
+                            .then(response => {
+                                if(response.status < 300){
+                                    history.push('/')}
+                                })
+                    }else{
+                        setError("That user already exists.")
+                    }
+                })
         }
     }
 
     return(
-        <form className="loginForm" onSubmit={HandleSubmit}>
+        <form className="smallForm" onSubmit={HandleSubmit}>
             <div className="form-inner">
                 <h2>Register</h2>
                 {(error !== "") ? ( <div className="error">{error}</div>) : ""}
@@ -42,9 +54,14 @@ export default function RegisterForm() {
                     <input type="text" name="password" id="password"
                         onChange={e => setDetails({...details, password: e.target.value})} value={details.password}/>
                 </div>
-                <br/>
-                 <input type="submit" value="register"/>
-             </div>
+                <br/><br/>
+                 <button
+                     className="btn btn-lg"
+                     type="submit"
+                     value="register"
+                     style={{position:"absolute", right:"33%", bottom:"20px"}}
+                 >Register</button>
+            </div>
         </form>
     )
 }
