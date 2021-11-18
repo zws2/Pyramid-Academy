@@ -3,13 +3,11 @@ import RaceDataService from '../../service/RaceDataService'
 
 export default function NotificationComponent(){
 
-    const [user, setUser] = useState({username: ""})
     const [notifications, setNotifications] = useState([])
 
     useEffect(() => {
         const stored_user = JSON.parse(window.localStorage.getItem('user'));
         if(stored_user !== null){
-            setUser(stored_user)
             RaceDataService.retrieveAllNotifications().then(response => {
                 let temp_notifications = []
                 for(let i=0; i<response.data.length; i++){

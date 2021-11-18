@@ -66,20 +66,63 @@ export default function UpdateRaceComponent() {
             setError("please select 6 horses")
         }else{
 
-            let str = horses.added[0].name
-            for(let i=1; i<horses.added.length; i++){
-                str += ", " + horses.added[i].name
-            }
-
-            let race_submission = race
-            race_submission.results = str
-
-            RaceDataService.updateRace(race_submission)
+            let users_to_update = []
+            RaceDataService.retrieveAllBets()
                 .then(response => {
-                    if(response.status < 300){
-                        history.push('/raceRegistry')
+                    let notification_promises = []
+                    for(let i=0; i<response.data.length; i++){
+                        const current_bet = response.data[i]
+                        if(current_bet.race_id === race.id){
+                            let outcome_msg = ""
+                            if(horses.added[0].name === current_bet.horse_name){
+                                const credits = current_bet.amount_bet * 6
+                                outcome_msg = "Your bet on " + current_bet.horse_name + " won you "
+                                    + credits + " credits!"
+                                users_to_update.push({username: current_bet.user_username, amount_won: credits})
+                            }else {
+                                const credits = current_bet.amount_bet
+                                outcome_msg = "Your bet on " + current_bet.horse_name + " lost you "
+                                    + credits + " credits!"
+                                users_to_update.push({username: current_bet.user_username, amount_won: 0})
+                            }
+                            const notification = {
+                                user_username: current_bet.user_username,
+                                message: "Race " + current_bet.race_id + " has ended. " + outcome_msg
+                            }
+                            notification_promises.push(RaceDataService.addNotification(notification))
+                        }
                     }
+                    return Promise.all(notification_promises)
+                }).then(RaceDataService.retrieveAllUsers()
+                    .then(response => {
+                        let update_promises = []
+                        for(let i=0; i<users_to_update.length; i++){
+                            const curr_user =
+                                response.data.find(u => u.name === users_to_update[i].name)
+                            const updated_user =
+                                { ...curr_user,
+                                    credits: (users_to_update[i].amount_won + curr_user.credits)}
+
+                            update_promises.push(RaceDataService.updateUser(updated_user))
+                        }
+                    return Promise.all(update_promises)
+                })).then(function() {
+
+                    let str = horses.added[0].name
+                    for(let i=1; i<horses.added.length; i++){
+                        str += ", " + horses.added[i].name
+                    }
+
+                    let race_submission = race
+                    race_submission.results = str
+
+                    return RaceDataService.updateRace(race_submission)
                 })
+//                 .then(response => {
+//                     if(response.status < 300){
+//                         return history.push('/raceRegistry')
+//                     }
+//                 })
         }
     }
 
