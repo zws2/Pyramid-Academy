@@ -85,7 +85,7 @@ export default function RaceRegistryComponent() {
                                        >Update</button></td>
                                    </React.Fragment>
                                ) : (
-                                   race.results === "" &&
+                                   race.results === "" && user.username !== "" &&
                                    <React.Fragment>
                                        <td><button
                                            className="btn btn-success"

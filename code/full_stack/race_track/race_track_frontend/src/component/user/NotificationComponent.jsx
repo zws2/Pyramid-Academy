@@ -12,10 +12,14 @@ export default function NotificationComponent(){
                 let temp_notifications = []
                 for(let i=0; i<response.data.length; i++){
                     if(response.data[i].user_username === stored_user.username){
-                        temp_notifications.push(response.data[i])
+                        const note = {...response.data[i], is_read: true}
+                        if(!response.data[i].is_read){
+                            RaceDataService.updateNotification(note)
+                        }
+                        temp_notifications.push(note)
                     }
                 }
-                setNotifications(temp_notifications)
+                setNotifications(temp_notifications.reverse())
             })
         }
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
