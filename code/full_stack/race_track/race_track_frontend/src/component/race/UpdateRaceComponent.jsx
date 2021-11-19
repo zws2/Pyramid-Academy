@@ -65,19 +65,57 @@ export default function UpdateRaceComponent() {
         if(horses.added.length !== 6){
             setError("please select 6 horses")
         }else{
+            let users_to_update = []
+            RaceDataService.retrieveAllBets()
+                .then(response => {
+                    let notification_promises = []
+                    for(let i=0; i<response.data.length; i++){
+                        const current_bet = response.data[i]
+                        if(current_bet.race_id === race.id){
+                            let outcome_msg = ""
+                            if(horses.added[0].name === current_bet.horse_name){
+                                const credits = current_bet.amount_bet * 6
+                                outcome_msg = "Your bet on " + current_bet.horse_name + " won you "
+                                    + credits + " credits!"
+                                users_to_update.push({username: current_bet.user_username, amount_won: credits})
+                            }else {
+                                const credits = current_bet.amount_bet
+                                outcome_msg = "Your bet on " + current_bet.horse_name + " lost you "
+                                    + credits + " credits!"
+                            }
+                            const notification = {
+                                user_username: current_bet.user_username,
+                                message: "Race " + current_bet.race_id + " has ended. " + outcome_msg
+                            }
+                            notification_promises.push(RaceDataService.addNotification(notification))
+                        }
+                    }
+                    return Promise.all(notification_promises)
+                }).then(async function() {
+                    for(let i=0; i<users_to_update.length; i++){
+                        await RaceDataService.retrieveUser(users_to_update[i].username)
+                            .then(response => {
+                                const updated_user =
+                                    { ...response.data,
+                                        credits: (users_to_update[i].amount_won + response.data.credits)}
+                                return RaceDataService.updateUser(updated_user)
+                        })
+                    }
+               }).then(function() {
 
-            let str = horses.added[0].name
-            for(let i=1; i<horses.added.length; i++){
-                str += ", " + horses.added[i].name
-            }
+                    let str = horses.added[0].name
+                    for(let i=1; i<horses.added.length; i++){
+                        str += ", " + horses.added[i].name
+                    }
 
-            let race_submission = race
-            race_submission.results = str
+                    let race_submission = race
+                    race_submission.results = str
 
-            RaceDataService.updateRace(race_submission)
+                    return RaceDataService.updateRace(race_submission)
+                })
                 .then(response => {
                     if(response.status < 300){
-                        history.push('/raceRegistry')
+                        return history.push('/raceRegistry')
                     }
                 })
         }

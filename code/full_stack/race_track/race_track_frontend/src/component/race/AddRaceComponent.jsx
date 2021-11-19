@@ -67,16 +67,26 @@ export default function AddRaceComponent() {
                 race_submission.horses = str
                 race_submission.time = race.time.toLocaleString("en-US")
 
-                RaceDataService.addRace(race_submission)
+                RaceDataService.retrieveAllUsers()
                     .then(response => {
+                        let notification_promises = []
+                        response.data.forEach(u => {
+                            const notification = {
+                                user_username: u.username,
+                                message: "A new race has been posted for " + race_submission.time
+                            }
+                            notification_promises.push(RaceDataService.addNotification(notification))
+                        })
+                        return Promise.all(notification_promises)
+                    })
+                    .then(function() {
+                        return RaceDataService.addRace(race_submission)
+                    }).then(response => {
                         if(response.status < 300){
-                            history.push('/raceRegistry')
+                            return history.push('/raceRegistry')
                         }
                     })
             }
-
-
-
     }
 
     return(
