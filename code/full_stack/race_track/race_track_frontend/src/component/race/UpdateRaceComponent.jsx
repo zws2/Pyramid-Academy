@@ -62,8 +62,8 @@ export default function UpdateRaceComponent() {
 
     const handleSubmit = e => {
         e.preventDefault()
-        if(horses.added.length !== 6){
-            setError("please select 6 horses")
+        if(horses.added.length !== 5){
+            setError("please select 5 horses")
         }else{
             let users_to_update = []
             RaceDataService.retrieveAllBets()
@@ -74,7 +74,7 @@ export default function UpdateRaceComponent() {
                         if(current_bet.race_id === race.id){
                             let outcome_msg = ""
                             if(horses.added[0].name === current_bet.horse_name){
-                                const credits = current_bet.amount_bet * 6
+                                const credits = current_bet.amount_bet * 5
                                 outcome_msg = "Your bet on " + current_bet.horse_name + " won you "
                                     + credits + " credits!"
                                 users_to_update.push({username: current_bet.user_username, amount_won: credits})

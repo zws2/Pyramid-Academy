@@ -54,8 +54,8 @@ export default function AddRaceComponent() {
     const handleSubmit = e => {
             e.preventDefault()
 
-            if(horses.added.length !== 6){
-                setError("please select 6 horses")
+            if(horses.added.length !== 5){
+                setError("please select 5 horses")
             }else{
 
                 let str = horses.added[0].name

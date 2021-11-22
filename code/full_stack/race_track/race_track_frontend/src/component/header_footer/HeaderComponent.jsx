@@ -14,15 +14,16 @@ export default function HeaderComponent(){
         const stored_user = JSON.parse(window.localStorage.getItem('user'));
         if(stored_user !== null){
             setUser(stored_user)
+            let num = 0
+            RaceDataService.retrieveAllNotifications().then(response => {
+                response.data.forEach(e =>{
+                    if(!e.is_read && e.user_username === stored_user.username) num++
+                })
+                setNotificationNum(num)
+            })
         }
 
-        let num = 0
-        RaceDataService.retrieveAllNotifications().then(response => {
-            response.data.forEach(e =>{
-                if(!e.is_read && e.user_username === stored_user.username) num++
-            })
-            setNotificationNum(num)
-        })
+
     }, []);
 
 
@@ -47,19 +48,22 @@ export default function HeaderComponent(){
                     <h3><Link className="nav-link" to="/">Home</Link></h3>
                     <h3><Link className="nav-link" to="/raceRegistry">Races</Link></h3>
                     {(user.username !== "") ? (
-                        <React.Fragment>
-                            <h3><Link className="nav-link" to="/profile">Profile</Link></h3>
-                            <h3><Link className="nav-link" to="/notifications">
-                                <img
-                                    alt="notifications"
-                                    src={bell}
-                                    style={{height:"35px"}}
-                                />
-                                Notifications: {notificationNum}
-                            </Link></h3>
-                            <button onClick={Logout} style={{position:"absolute", right:"30px"}}>Logout</button>
-                        </React.Fragment>
-                        ) : (
+                        (user.username === "admin") ? (
+                                <button onClick={Logout} style={{position:"absolute", right:"30px"}}>Logout</button>
+                            ) : (
+                            <React.Fragment>
+                                <h3><Link className="nav-link" to="/profile">Profile</Link></h3>
+                                <h3><Link className="nav-link" to="/notifications">
+                                    <img
+                                        alt="notifications"
+                                        src={bell}
+                                        style={{height:"35px"}}
+                                    />
+                                    Notifications: {notificationNum}
+                                </Link></h3>
+                                <button onClick={Logout} style={{position:"absolute", right:"30px"}}>Logout</button>
+                            </React.Fragment>
+                        )) : (
                         <button onClick={Login} style={{position:"absolute", right:"30px"}}>Login</button>
                     )}
                 </ul>
